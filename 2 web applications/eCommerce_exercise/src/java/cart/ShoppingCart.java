@@ -17,9 +17,9 @@ public class ShoppingCart {
 
     }
 
-    public synchronized List<ShoppingCartItem> getItems() {
+    //public synchronized List<ShoppingCartItem> getItems() {
         
-    }
+    //}
 
     public synchronized int getNumberOfItems() {
         return 1;

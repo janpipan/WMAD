@@ -12,20 +12,20 @@ public class ShoppingCartItem {
 
     }   
     
-    public Product getProduct() {
+    //public Product getProduct() {
+    
+    //}
 
-    }
+    //public int getQuantity() {
 
-    public int getQuantity() {
-
-    }
+    //}
 
     public void setQuantity(int quantity) {
 
     }
 
     public double getTotal() {
-        
+        return 2.2;
     }
 
 }
