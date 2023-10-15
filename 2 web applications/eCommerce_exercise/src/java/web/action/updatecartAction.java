@@ -1,19 +1,18 @@
 package web.action;
 
 import javax.servlet.http.*;
-import model.CategoryModel;
+import model.ProductModel;
 import web.ViewManager;
 
 public class updatecartAction implements Action {
 
-    CategoryModel categoryModel;
+    ProductModel categoryModel;
 
-    public updatecartAction(CategoryModel categoryModel){
+    public updatecartAction(ProductModel categoryModel){
         this.categoryModel = categoryModel;
     }
 
     public void perform(HttpServletRequest req, HttpServletResponse resp) {
-        req.setAttribute("categories", categoryModel.retrieveAll());
         ViewManager.nextView(req, resp, "/view/init.jsp");
     }
 }

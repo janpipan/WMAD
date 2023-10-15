@@ -19,7 +19,7 @@ public class categoryAction implements Action {
 
 
     public void perform(HttpServletRequest req, HttpServletResponse resp) {
-        
+        req.setAttribute("categories", categoryModel.retrieveAll());
         req.setAttribute("products", productModel.retrieveAllCategory(Integer.parseInt(req.getParameter("categoryid"))));
         ViewManager.nextView(req, resp, "/view/category.jsp");
     }
