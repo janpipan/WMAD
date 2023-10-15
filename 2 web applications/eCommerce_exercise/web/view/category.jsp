@@ -21,25 +21,44 @@
         to your doorstep. </h3>
 
 
-    <table width="50%" border="1" bordercolordark="#000000" bordercolorlight="#FFFFFF" cellpadding="3" cellspacing="0">
-
-        <tr> <font size="2" face="Verdana">
-
+    <table width="50%" border="1" cellpadding="3" cellspacing="0">
+        
+        <tr>
+            <th style="text-align:center;">Item</th>
+            <th style="text-align:center;">Description</th>
+            <th style="text-align:center;">Price</th>
+            <th style="text-align:center;">Cart</th>
+        </tr>
+        
         <%
-        List<Product> products = (List<Product>)request.getAttribute("products");
+            List<Product> products = (List<Product>)request.getAttribute("products");
 
-        for(Product product : products){
-
+            for(Product product : products){
         %>
+                
+            <tr> 
+                <font size="2" face="Verdana">
 
-        <td width="14%" valign="center" align="middle">
-            <%=product.getName()%>
-            <img src="img/products/<%=product.getName()%>.png" alt="alt"/>
-        </td>
+            <td width="14%" valign="center" align="middle">
+                <img src="img/products/<%=product.getName()%>.png" alt="alt"/>
+            </td>
+            <td width="14%" valign="center" align="middle">
+                <b><%=product.getName()%></b>
+                <br>
+                <%=product.getDescription()%>
+            </td>
+            <td width="14%" valign="center" align="middle">
+                <%=product.getPrice()%>
+            </td>
+
+
+                </font> 
+            </tr>
  
-       <% } %>
-
-        </font> </tr>
+        <% } %>
+    
+    
+    
 
     </table>
 
