@@ -50,6 +50,11 @@
             <td width="14%" valign="center" align="middle">
                 <%=product.getPrice()%>
             </td>
+            <td width="14%" valign="center" align="middle">
+                <form type="submit" method="post" action="neworder.do">
+                    <button name="productId" value="<%=product.getId()%>">Add to cart</button>
+                </form>
+            </td>
 
 
                 </font> 

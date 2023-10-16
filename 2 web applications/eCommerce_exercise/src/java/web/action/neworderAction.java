@@ -1,5 +1,7 @@
 package web.action;
 
+
+import cart.ShoppingCart;
 import javax.servlet.http.*;
 import model.CategoryModel;
 import model.ProductModel;
@@ -16,7 +18,14 @@ public class neworderAction implements Action {
     }
 
     public void perform(HttpServletRequest req, HttpServletResponse resp) {
-        req.setAttribute("categories", categoryModel.retrieveAll());
-        ViewManager.nextView(req, resp, "/view/init.jsp");
+        
+        ShoppingCart sc = (ShoppingCart) req.getSession().getAttribute("shoppingCart");
+        if (sc == null){
+            sc = new ShoppingCart();
+        }
+        sc.addItem(productModel.retrieveById(Integer.parseInt(req.getParameter("productId"))));
+        req.getSession().setAttribute("cart", sc);
+        
+        ViewManager.nextView(req, resp, "/view/cart.jsp");
     }
 }

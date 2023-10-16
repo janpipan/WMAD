@@ -21,7 +21,11 @@ public class ShoppingCart {
             }
         }
         if (!containsItem){
-            this.shoppingCartItems.add(new ShoppingCartItem(product));
+            System.out.println("adding item");
+            ShoppingCartItem item = new ShoppingCartItem(product);
+            item.setQuantity(1);
+            this.shoppingCartItems.add(item);
+            
         }
     }
 
@@ -36,6 +40,7 @@ public class ShoppingCart {
     public synchronized int getNumberOfItems() {
         int numberOfItems = 0;
         for (ShoppingCartItem item: shoppingCartItems) {
+            System.out.println(item);
             numberOfItems += item.getQuantity();
         }
         return numberOfItems;

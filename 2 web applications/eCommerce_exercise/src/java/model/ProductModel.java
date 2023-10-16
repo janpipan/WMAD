@@ -36,5 +36,10 @@ public class ProductModel {
         q.setParameter("id",categoryid);
         return q.getResultList();
     }
-
+    
+    public Product retrieveById(Integer id) {
+        Query q = em.createNamedQuery("Product.findById");
+        q.setParameter("id",id);
+        return (Product) q.getSingleResult();
+    }
 }
