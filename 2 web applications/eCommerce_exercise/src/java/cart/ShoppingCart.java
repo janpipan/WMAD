@@ -9,11 +9,11 @@ import java.util.*;
  */
 public class ShoppingCart {
     
-    private List<ShoppingCartItem> shoppingCartItems = new ArrayList<ShoppingCartItem>();
+    private List<ShoppingCartItem> shoppingCart = new ArrayList<ShoppingCartItem>();
 
     public synchronized void addItem(Product product){
         boolean containsItem = false;
-        for (ShoppingCartItem item: shoppingCartItems) {
+        for (ShoppingCartItem item: shoppingCart) {
             if (item.getProduct().getId() == product.getId()){
                 containsItem = true;
                 item.setQuantity(item.getQuantity()+1);
@@ -24,22 +24,22 @@ public class ShoppingCart {
             System.out.println("adding item");
             ShoppingCartItem item = new ShoppingCartItem(product);
             item.setQuantity(1);
-            this.shoppingCartItems.add(item);
+            this.shoppingCart.add(item);
             
         }
     }
 
     public synchronized void update(Product product, int quantity) {
-        this.shoppingCartItems.get(this.shoppingCartItems.indexOf(product)).setQuantity(quantity);
+        this.shoppingCart.get(this.shoppingCart.indexOf(product)).setQuantity(quantity);
     }
 
     public synchronized List<ShoppingCartItem> getItems() {
-        return shoppingCartItems;
+        return shoppingCart;
     }
 
     public synchronized int getNumberOfItems() {
         int numberOfItems = 0;
-        for (ShoppingCartItem item: shoppingCartItems) {
+        for (ShoppingCartItem item: shoppingCart) {
             System.out.println(item);
             numberOfItems += item.getQuantity();
         }
@@ -48,14 +48,14 @@ public class ShoppingCart {
 
     public synchronized double getTotal() {
         double total = 0;
-        for (ShoppingCartItem item: shoppingCartItems) {
+        for (ShoppingCartItem item: shoppingCart) {
             total += item.getTotal();
         }
         return total;
     }
 
     public synchronized void clear() {
-        this.shoppingCartItems.clear();
+        this.shoppingCart.clear();
     }
     
 

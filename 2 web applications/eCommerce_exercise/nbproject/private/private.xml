@@ -13,19 +13,17 @@
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/entity/Product.java</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/web/ViewManager.java</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/cart/ShoppingCartItem.java</file>
-            <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/web/action/updatecartAction.java</file>
+            <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/web/view/cart.jsp</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/web/action/Action.java</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/entity/Category.java</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/web/action/initAction.java</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/web/action/checkoutAction.java</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/model/CategoryModel.java</file>
-            <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/web/img/products/chicken.png</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/web/action/clearcartAction.java</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/model/ProductModel.java</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/util/ContextListener.java</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/web/view/init.jsp</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/web/start.jsp</file>
-            <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/web/WEB-INF/web.xml</file>
             <file>file:/home/entel/exercises/2%20web%20applications/eCommerce_exercise/src/java/web/action/viewcartAction.java</file>
         </group>
     </open-files>

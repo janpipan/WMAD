@@ -13,6 +13,6 @@ public class updatecartAction implements Action {
     }
 
     public void perform(HttpServletRequest req, HttpServletResponse resp) {
-        ViewManager.nextView(req, resp, "/view/init.jsp");
+        ViewManager.nextView(req, resp, "/view/cart.jsp");
     }
 }

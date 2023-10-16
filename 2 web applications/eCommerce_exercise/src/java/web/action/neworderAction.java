@@ -19,7 +19,7 @@ public class neworderAction implements Action {
 
     public void perform(HttpServletRequest req, HttpServletResponse resp) {
         
-        ShoppingCart sc = (ShoppingCart) req.getSession().getAttribute("shoppingCart");
+        ShoppingCart sc = (ShoppingCart) req.getSession().getAttribute("cart");
         if (sc == null){
             sc = new ShoppingCart();
         }

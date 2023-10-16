@@ -4,6 +4,7 @@
     Author     : entel
 --%>
 
+<%@page import="cart.ShoppingCartItem"%>
 <%@page import="cart.ShoppingCart"%>
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
 <!DOCTYPE html>
@@ -16,9 +17,56 @@
         <h1>Cart</h1>
         
         <%
-        ShoppingCart sc = (ShoppingCart) request.getSession().getAttribute("cart");
+            ShoppingCart sc = (ShoppingCart) request.getSession().getAttribute("cart");
+
+        %>
+                
+        <p><%=sc.getNumberOfItems()%></p>
+        
+        <table width="50%" border="1" cellpadding="3" cellspacing="0">
+        
+        <tr>
+            <th style="text-align:center;">Item</th>
+            <th style="text-align:center;">Description</th>
+            <th style="text-align:center;">Price</th>
+            <th style="text-align:center;">Quantity</th>
+        </tr>
+        
+        <%
+        
+            for(ShoppingCartItem item : sc.getItems()){
+
         %>
         
-        <p><%=sc.getNumberOfItems()%></p>
+            <tr> 
+                <font size="2" face="Verdana">
+
+            <td width="14%" valign="center" align="middle">
+                <img src="img/products/<%=item.getProduct().getName()%>.png" alt="alt"/>
+            </td>
+            <td width="14%" valign="center" align="middle">
+                <b><%=item.getProduct().getName()%></b>
+                <br>
+                <%=item.getProduct().getDescription()%>
+            </td>
+            <td width="14%" valign="center" align="middle">
+                <%=item.getProduct().getPrice()%>
+            </td>
+            <td width="14%" valign="center" align="middle">
+                <form type="submit" method="post" action="updatecart.do">
+                    <input value="<%=item.getQuantity()%>"></input>
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+
+                </font> 
+            </tr>
+ 
+        <% } %>
+    
+    
+    
+
+    </table>
     </body>
 </html>
