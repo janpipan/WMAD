@@ -54,7 +54,8 @@
             </td>
             <td width="14%" valign="center" align="middle">
                 <form type="submit" method="post" action="updatecart.do">
-                    <input value="<%=item.getQuantity()%>"></input>
+                    <input type="hidden" name="productId" value="<%=item.getProduct().getId()%>">
+                    <input name="quantity" value="<%=item.getQuantity()%>"></input>
                     <button type="submit">Update</button>
                 </form>
             </td>

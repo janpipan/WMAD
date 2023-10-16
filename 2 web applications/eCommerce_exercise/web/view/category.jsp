@@ -63,8 +63,9 @@
         <% } %>
     
     
-    
 
     </table>
+        
+    <a href="viewcart.do">View Cart</a>
 
     </body>
