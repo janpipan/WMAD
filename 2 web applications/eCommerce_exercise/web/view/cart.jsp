@@ -23,6 +23,18 @@
                 
         <p><%=sc.getNumberOfItems()%></p>
         
+        <a href="clearcart.do">Clear cart</a>
+        
+        <br>
+        
+        <a href="init.do">Return to store</a>
+        
+        <br>
+        
+        <a>Procced to checkout</a>
+        
+        <br>
+        
         <table width="50%" border="1" cellpadding="3" cellspacing="0">
         
         <tr>
