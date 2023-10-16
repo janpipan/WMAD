@@ -21,7 +21,6 @@ public class ShoppingCart {
             }
         }
         if (!containsItem){
-            System.out.println("adding item");
             ShoppingCartItem item = new ShoppingCartItem(product);
             item.setQuantity(1);
             this.shoppingCart.add(item);
@@ -30,7 +29,12 @@ public class ShoppingCart {
     }
 
     public synchronized void update(Product product, int quantity) {
-        this.shoppingCart.get(this.shoppingCart.indexOf(product)).setQuantity(quantity);
+        for (ShoppingCartItem item: shoppingCart) {
+            if (item.getProduct().getId() == product.getId()){
+                item.setQuantity(quantity);
+                break;
+            }
+        }
     }
 
     public synchronized List<ShoppingCartItem> getItems() {
@@ -40,7 +44,6 @@ public class ShoppingCart {
     public synchronized int getNumberOfItems() {
         int numberOfItems = 0;
         for (ShoppingCartItem item: shoppingCart) {
-            System.out.println(item);
             numberOfItems += item.getQuantity();
         }
         return numberOfItems;

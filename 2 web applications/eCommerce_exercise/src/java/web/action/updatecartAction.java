@@ -1,18 +1,26 @@
 package web.action;
 
+import cart.ShoppingCart;
+import entity.Product;
 import javax.servlet.http.*;
 import model.ProductModel;
 import web.ViewManager;
 
 public class updatecartAction implements Action {
 
-    ProductModel categoryModel;
+    ProductModel productModel;
 
-    public updatecartAction(ProductModel categoryModel){
-        this.categoryModel = categoryModel;
+    public updatecartAction(ProductModel productModel){
+        this.productModel = productModel;
     }
 
     public void perform(HttpServletRequest req, HttpServletResponse resp) {
-        ViewManager.nextView(req, resp, "/view/.jsp");
+        System.out.println("updating");
+        ShoppingCart sc = (ShoppingCart) req.getSession().getAttribute("cart");
+        
+        Product product = (Product) productModel.retrieveById(Integer.parseInt(req.getParameter("productId")));
+        Integer quantity = Integer.parseInt(req.getParameter("quantity"));
+        sc.update(product,quantity);
+        ViewManager.nextView(req, resp, "/view/cart.jsp");
     }
 }
