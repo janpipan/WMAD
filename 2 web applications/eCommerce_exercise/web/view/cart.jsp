@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-        <title>JSP Page</title>
+        <title>Cart</title>
     </head>
     <body>
         <h1>Cart</h1>
@@ -31,7 +31,7 @@
         
         <br>
         
-        <a>Procced to checkout</a>
+        <a href="checkout.do">Proced to checkout</a>
         
         <br>
         
