@@ -10,7 +10,12 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Expires" CONTENT="0">
+        <meta http-equiv="Cache-Control" CONTENT="no-cache">
+        <meta http-equiv="Pragma" CONTENT="no-cache">
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+        <link href="css/styles.css" rel="stylesheet">
         <title>Cart</title>
     </head>
     <body>
@@ -18,68 +23,86 @@
         
         <%
             ShoppingCart sc = (ShoppingCart) request.getSession().getAttribute("cart");
-
+            Integer numItems = sc.getNumberOfItems();
+            if (numItems > 1){
         %>
-                
-        <p><%=sc.getNumberOfItems()%></p>
-        
-        <a href="clearcart.do">Clear cart</a>
-        
-        <br>
-        
-        <a href="init.do">Return to store</a>
-        
-        <br>
-        
-        <a href="checkout.do">Proced to checkout</a>
-        
-        <br>
-        
-        <table width="50%" border="1" cellpadding="3" cellspacing="0">
-        
-        <tr>
-            <th style="text-align:center;">Item</th>
-            <th style="text-align:center;">Description</th>
-            <th style="text-align:center;">Price</th>
-            <th style="text-align:center;">Quantity</th>
-        </tr>
-        
+           
+        <div>Your shopping cart contains <%=sc.getNumberOfItems()%> items.</div>
         <%
-        
-            for(ShoppingCartItem item : sc.getItems()){
-
+            }else if (numItems == 1) {
+        %>
+            <div>Your shopping cart contains <%=sc.getNumberOfItems()%> item.</div>
+        <%
+            } else {
+        %>
+            <div>Your shopping cart is empty.</div>
+        <%
+            }
         %>
         
-            <tr> 
-                <font size="2" face="Verdana">
+        <div>
+            <a href="clearcart.do">Clear cart</a>
+        </div>
+        
+        
+        <div>
+            <a href="init.do">Return to store</a>
+        </div>
+        
+        
+        <div>
+            <a href="checkout.do">Proceed to checkout</a>
+        </div>
+        
+        <div class="container">
+            <table class="itemTable" border="1" cellpadding="3" cellspacing="0">
+        
+                <tr>
+                    <th style="text-align:center;">Item</th>
+                    <th style="text-align:center;">Description</th>
+                    <th style="text-align:center;">Price</th>
+                    <th style="text-align:center;">Quantity</th>
+                </tr>
 
-            <td width="14%" valign="center" align="middle">
-                <img src="img/products/<%=item.getProduct().getName()%>.png" alt="alt"/>
-            </td>
-            <td width="14%" valign="center" align="middle">
-                <b><%=item.getProduct().getName()%></b>
-                <br>
-                <%=item.getProduct().getDescription()%>
-            </td>
-            <td width="14%" valign="center" align="middle">
-                <%=item.getProduct().getPrice()%>
-            </td>
-            <td width="14%" valign="center" align="middle">
-                <form type="submit" method="post" action="updatecart.do">
-                    <input type="hidden" name="productId" value="<%=item.getProduct().getId()%>">
-                    <input name="quantity" value="<%=item.getQuantity()%>"></input>
-                    <button type="submit">Update</button>
-                </form>
-            </td>
+                <%
 
-                </font> 
-            </tr>
- 
-        <% } %>
-    
-    
-    
+                    for(ShoppingCartItem item : sc.getItems()){
 
-    </table>
+                %>
+
+                    <tr> 
+
+                    <td valign="center" align="middle">
+                        <img src="img/products/<%=item.getProduct().getName()%>.png" alt="alt"/>
+                    </td>
+                    <td valign="center" align="middle">
+                        <b><%=item.getProduct().getName()%></b>
+                        <br>
+                        <%=item.getProduct().getDescription()%>
+                    </td>
+                    <td valign="center" align="middle">
+                        <%=item.getProduct().getPrice()%> €
+                    </td>
+                    <td valign="center" align="middle">
+                        <form type="submit" method="post" action="updatecart.do">
+                            <input type="hidden" name="productId" value="<%=item.getProduct().getId()%>">
+                            <input name="quantity" value="<%=item.getQuantity()%>"></input>
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+
+                        
+                    </tr>
+
+                <% } %>
+
+
+
+
+            </table>
+        </div>
+       
+        
+            
     </body>
 </html>

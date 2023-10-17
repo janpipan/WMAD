@@ -1,0 +1,29 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 17, 2023, 7:59:34 PM
+    Author     : entel
+*/
+.container {
+    display:flex;
+    justify-content:center;
+}
+
+h2 {
+    margin:10px;
+}
+
+p {
+    margin: 10px;
+}
+
+a {
+    margin:10px;
+}
+
+.itemTable {
+    width:75%;
+}
