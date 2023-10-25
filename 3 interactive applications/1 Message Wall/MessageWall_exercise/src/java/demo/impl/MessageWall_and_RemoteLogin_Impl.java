@@ -12,37 +12,49 @@ public class MessageWall_and_RemoteLogin_Impl implements RemoteLogin, MessageWal
   private List<Message> messages;
 
   public MessageWall_and_RemoteLogin_Impl() {
-    messages = new ArrayList<Message>();
+    this.messages = new ArrayList<Message>();
   }
 
   @Override
   public UserAccess connect(String usr, String passwd) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return new UserAccess_Impl((MessageWall) this.messages ,usr); 
+      //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public void put(String user, String msg) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      this.messages.add(new Message_Impl(user, msg));
+      //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public boolean delete(String user, int index) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      Message msg = this.messages.get(index);
+      if (msg.getOwner() == user) {
+          this.messages.remove(index);
+          return true;
+      } else {
+          return false;
+      }
+      //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public Message getLast() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return this.messages.get(this.messages.size()-1);
+      //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public int getNumber() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return this.messages.size();
+      //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public List<Message> getAllMessages() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return this.messages;
+      //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
 }
