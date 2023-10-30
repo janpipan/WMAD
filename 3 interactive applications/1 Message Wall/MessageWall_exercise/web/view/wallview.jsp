@@ -26,7 +26,7 @@
 
 <body>
     
-    <h3>user: <em><%=%></em>
+    <h3>user: <em><%=request.getSession().getAttribute()%></em>
         <a href=logout.do>[Close session]</a></h3>
 
     <h2> <%=%> Messages shown:</h2>

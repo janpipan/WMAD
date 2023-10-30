@@ -11,9 +11,9 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <link href="css/styles.css" rel="stylesheet">
         <%
-            Category category = (Category) request.getAttribute("category");
-            String categoryName = category.getName();
-            String title = categoryName.substring(0,1).toUpperCase() + categoryName.substring(1);
+            Category selectedCategory = (Category) request.getAttribute("category");
+            String selectedCategoryName = selectedCategory.getName();
+            String title = selectedCategoryName.substring(0,1).toUpperCase() + selectedCategoryName.substring(1);
         %>
         <title>
             <%=title%>
@@ -22,7 +22,7 @@
     
     <body>
 
-        <h2>Products of <%=categoryName%></h2>
+        <h2>Products of <%=selectedCategoryName%></h2>
 
         <div>
             <img src="img/cart.gif" alt="cart"></img>
@@ -30,7 +30,21 @@
         </div>
 
 
-        <div class="container">
+        <div class="container" style="flex-direction: column;" >
+            <table class="itemTable">
+                <tr>
+                    <% 
+                        List<Category> categories = (List<Category>)request.getAttribute("categories");
+                        for (Category category : categories) {
+                    %>
+                    <td style="text-align: center;">
+                        <a href="category.do?categoryid=<%=category.getId()%>"><%=category.getName()%></a>
+                    </td>
+                    <%
+                        }
+                    %>
+                </tr>
+            </table>
             <table class="itemTable" border="1" cellpadding="3" cellspacing="0">
         
                 <tr>
