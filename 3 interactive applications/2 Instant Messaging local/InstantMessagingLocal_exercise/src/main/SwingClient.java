@@ -6,6 +6,7 @@ import util.Topic;
 import subscriber.SubscriberImpl;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,7 +105,13 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      e.
+      List<Topic> topicList = topicManager.topics();
+      
+      StringBuilder topicListText = new StringBuilder();
+      for (Topic topic : topicList){
+          topicListText.append(topic.getName() + "\n");
+      }
+      topic_list_TextArea.setText(topicListText.toString());
       
     }
   }

@@ -31,7 +31,11 @@ public class ShoppingCart {
     public synchronized void update(Product product, int quantity) {
         for (ShoppingCartItem item: shoppingCart) {
             if (item.getProduct().getId() == product.getId()){
-                item.setQuantity(quantity);
+                if (quantity <= 0) {
+                    shoppingCart.remove(item);
+                } else {
+                    item.setQuantity(quantity);
+                }
                 break;
             }
         }
