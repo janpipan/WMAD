@@ -104,7 +104,7 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      e.
       
     }
   }
