@@ -26,10 +26,10 @@
 
 <body>
     
-    <h3>user: <em><%=request.getSession().getAttribute()%></em>
+    <h3>user: <em><%=(UserAccess) request.getSession().getAttribute("userAccess")%></em>
         <a href=logout.do>[Close session]</a></h3>
 
-    <h2> <%=%> Messages shown:</h2>
+    <h2> Messages shown:</h2>
 
     <table width="50%" border="1" bordercolordark="#000000" bordercolorlight="#FFFFFF" cellpadding="3" cellspacing="0">
 
@@ -54,18 +54,18 @@
         <tr> <font size="2" face="Verdana">
 
         <td width="14%" valign="center" align="middle">
-            <%=%>
+            
         </td>
 
         <td width="14%" valign="center" align="middle">
-            <%=%>
+            
         </td>
 
         <td width="14%" valign="center" align="middle">
             <form action="delete.do" method="post">
                 <input type="hidden"
                        name="index"
-                       value="<%=%>">
+                       value="">
                 <input type="submit"
                        name="delete"
                        value="delete">

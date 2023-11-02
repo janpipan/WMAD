@@ -34,14 +34,26 @@ public class ControllerServlet extends HttpServlet {
         
         String serv_path = request.getServletPath();
         HttpSession session = request.getSession();
+        
 
         if (serv_path.equals("/login.do")) {
-            //...
+            RemoteLogin remoteLogin = (RemoteLogin) request.getServletContext().getAttribute("remoteLogin");
+            UserAccess ua = remoteLogin.connect(request.getParameter("user"), request.getParameter("password"));
+            
+            if (ua != null){
+                session.setAttribute("userAccess", ua);
+                
+                return "/wallview";
+            }
             return "/error-no-user_access.html";
         } 
         
         else if (serv_path.equals("/put.do")) {
-            //...
+            UserAccess ua = (UserAccess)session.getAttribute("userAccess");
+            if (ua != null){
+                ua.put(request.getParameter("msg"));
+                return "/wallview";
+            }
             return "/error-not-loggedin.html";
         } 
         

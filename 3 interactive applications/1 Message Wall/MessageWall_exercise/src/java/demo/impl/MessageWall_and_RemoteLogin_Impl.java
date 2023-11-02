@@ -17,21 +17,21 @@ public class MessageWall_and_RemoteLogin_Impl implements RemoteLogin, MessageWal
 
   @Override
   public UserAccess connect(String usr, String passwd) {
-      return new UserAccess_Impl((MessageWall) this.messages ,usr); 
+      return new UserAccess_Impl(this ,usr); 
       //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public void put(String user, String msg) {
-      this.messages.add(new Message_Impl(user, msg));
+      messages.add(new Message_Impl(user, msg));
       //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public boolean delete(String user, int index) {
-      Message msg = this.messages.get(index);
+      Message msg = messages.get(index);
       if (msg.getOwner() == user) {
-          this.messages.remove(index);
+          messages.remove(index);
           return true;
       } else {
           return false;
@@ -41,19 +41,23 @@ public class MessageWall_and_RemoteLogin_Impl implements RemoteLogin, MessageWal
 
   @Override
   public Message getLast() {
-      return this.messages.get(this.messages.size()-1);
+      int size = this.messages.size();
+      if (size > 0){
+          return this.messages.get(this.messages.size() -1);
+      }
+      return new Message_Impl("","");
       //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public int getNumber() {
-      return this.messages.size();
+      return messages.size();
       //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public List<Message> getAllMessages() {
-      return this.messages;
+      return messages;
       //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

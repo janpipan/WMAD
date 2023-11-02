@@ -23,12 +23,14 @@ public class TopicManagerImpl implements TopicManager {
   @Override
   public Publisher addPublisherToTopic(Topic topic) {
       Publisher pub;
-      if (topicMap.containsKey(topic)){
-          pub = topicMap.get(topic);
+      Topic_check tc = this.isTopic(topic);
+      
+      if (tc.isOpen) {
+          pub = topicMap.get(tc.topic);
           pub.incPublishers();
       } else {
-          pub = new PublisherImpl(topic);
-          topicMap.put(topic, pub);
+          pub = new PublisherImpl(tc.topic);
+          topicMap.put(tc.topic, pub);
       }
       return pub;
     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -47,7 +49,14 @@ public class TopicManagerImpl implements TopicManager {
 
   @Override
   public Topic_check isTopic(Topic topic) {
-      return new Topic_check(topic, topicMap.containsKey(topic));
+      for (Map.Entry<Topic, Publisher> set : topicMap.entrySet()){
+          Topic top = set.getKey();
+          if (top.equals(topic)){
+              return new Topic_check(top,true);
+          }
+          
+      }
+      return new Topic_check(topic, false);
     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
@@ -63,7 +72,7 @@ public class TopicManagerImpl implements TopicManager {
       for (Topic top : this.topics()){
           if (top.equals(topic)){
               topicMap.get(topic).attachSubscriber(subscriber);
-              return new Subscription_check(topic, Result.OKAY);
+              return new Subscription_check(top, Result.OKAY);
           }
       }
       return new Subscription_check(topic, Result.NO_TOPIC);

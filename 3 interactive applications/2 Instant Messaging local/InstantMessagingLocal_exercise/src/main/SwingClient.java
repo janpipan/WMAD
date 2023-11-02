@@ -13,6 +13,7 @@ import java.util.Map;
 import publisher.Publisher;
 import subscriber.Subscriber;
 import topicmanager.TopicManager;
+import util.Topic_check;
 
 public class SwingClient {
 
@@ -120,7 +121,11 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+        Topic_check topicCheck = topicManager.isTopic(new Topic(argument_TextField.getText()));
+        
+        publisherTopic = topicCheck.topic;
+        publisher = topicManager.addPublisherToTopic(publisherTopic);
+        argument_TextField.setText("");
       
     }
   }
@@ -129,7 +134,10 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      Subscriber sub = new SubscriberImpl(SwingClient.this);
+      Subscription_check sub_check = topicManager.subscribe(new Topic(argument_TextField.getText()),sub);
+      //System.out.println(sub_check.result == );
+      //my_subscriptions.set(sub_check.topic)
       
     }
   }
@@ -147,7 +155,7 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      publisher.publish(new Message(publisherTopic, argument_TextField.getText()));
       
     }
   }

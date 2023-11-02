@@ -11,13 +11,13 @@ public class UserAccess_Impl implements UserAccess {
   private MessageWall messageWall;
 
   public UserAccess_Impl(MessageWall mw, String usr) {
-    messageWall = mw;
-    user = usr;
+    this.messageWall = mw;
+    this.user = usr;
   }
 
   @Override
   public String getUser() {
-    return user;
+    return this.user;
     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
