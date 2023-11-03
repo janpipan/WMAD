@@ -5,6 +5,7 @@ import demo.spec.MessageWall;
 import demo.spec.RemoteLogin;
 import demo.spec.UserAccess;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 public class MessageWall_and_RemoteLogin_Impl implements RemoteLogin, MessageWall {
@@ -17,8 +18,24 @@ public class MessageWall_and_RemoteLogin_Impl implements RemoteLogin, MessageWal
 
   @Override
   public UserAccess connect(String usr, String passwd) {
-      return new UserAccess_Impl(this ,usr); 
-      //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Hashtable<String, String> userPass = new Hashtable<String, String>();
+        
+        userPass.put("Oliver","password1");
+        userPass.put("Jack","password2");
+        userPass.put("Harry","password3");
+        userPass.put("Alice","password4");
+        userPass.put("Emily","password5");
+        
+        
+        if (userPass.containsKey(usr)) {
+            if (userPass.get(usr).equals(passwd)){
+                return new UserAccess_Impl(this,usr);
+            }
+        }
+        return null;
+        //return new UserAccess_Impl(this ,usr); 
+        
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override

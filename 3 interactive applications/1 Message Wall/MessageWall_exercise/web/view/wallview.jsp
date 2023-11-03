@@ -26,10 +26,14 @@
 
 <body>
     
-    <h3>user: <em><%=(UserAccess) request.getSession().getAttribute("userAccess")%></em>
+    <%
+        UserAccess ua = (UserAccess) request.getSession().getAttribute("userAccess");
+    %>
+    
+    <h3>user: <em><%=ua.getUser()%></em>
         <a href=logout.do>[Close session]</a></h3>
 
-    <h2> Messages shown:</h2>
+    <h2> <%=ua.getNumber()%> Messages shown:</h2>
 
     <table width="50%" border="1" bordercolordark="#000000" bordercolorlight="#FFFFFF" cellpadding="3" cellspacing="0">
 
@@ -46,26 +50,26 @@
         </td>
 
         <%
-
-            
+            int index = 0;
+            for(Message msg : ua.getAllMessages()){
 
         %>
 
         <tr> <font size="2" face="Verdana">
 
         <td width="14%" valign="center" align="middle">
-            
+            <%=msg.getContent()%>
         </td>
 
         <td width="14%" valign="center" align="middle">
-            
+            <%=msg.getOwner()%>
         </td>
 
         <td width="14%" valign="center" align="middle">
             <form action="delete.do" method="post">
                 <input type="hidden"
                        name="index"
-                       value="">
+                       value="<%=index++%>">
                 <input type="submit"
                        name="delete"
                        value="delete">
@@ -75,7 +79,9 @@
         </font> 
     </tr>
 
-    <% %>
+    <% 
+        }
+    %>
 
 </table>
 

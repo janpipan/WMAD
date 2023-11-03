@@ -1,8 +1,10 @@
 package demo.web;
 
+import demo.spec.MessageWall;
 import demo.spec.RemoteLogin;
 import demo.spec.UserAccess;
 import java.io.IOException;
+import java.util.Hashtable;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class ControllerServlet extends HttpServlet {
+    
+    
+    
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws IOException, ServletException {
@@ -32,8 +37,10 @@ public class ControllerServlet extends HttpServlet {
     protected String perform_action(HttpServletRequest request)
         throws IOException, ServletException {
         
+        
         String serv_path = request.getServletPath();
         HttpSession session = request.getSession();
+        
         
 
         if (serv_path.equals("/login.do")) {
@@ -43,7 +50,8 @@ public class ControllerServlet extends HttpServlet {
             if (ua != null){
                 session.setAttribute("userAccess", ua);
                 
-                return "/wallview";
+                //return "/wallview";
+                return "/view/wallview.jsp";
             }
             return "/error-no-user_access.html";
         } 
@@ -52,23 +60,41 @@ public class ControllerServlet extends HttpServlet {
             UserAccess ua = (UserAccess)session.getAttribute("userAccess");
             if (ua != null){
                 ua.put(request.getParameter("msg"));
-                return "/wallview";
+                //return "/wallview";
+                return "/view/wallview.jsp";
             }
             return "/error-not-loggedin.html";
         } 
         
         else if (serv_path.equals("/refresh.do")) {
-            //...
+            UserAccess ua = (UserAccess)session.getAttribute("userAccess");
+            if (ua != null){
+                ua.getLast();
+                //return "/wallview";
+                return "/view/wallview.jsp";
+            }
+            
             return "/error-not-loggedin.html";
         } 
         
         else if (serv_path.equals("/logout.do")) {
-            //...
+            if (session.getAttribute("userAccess") != null) {
+                session.removeAttribute("userAccess");
+            }
             return "/goodbye.html";
         } 
         
         else if (serv_path.equals("/delete.do")) {
-            //...
+            UserAccess ua = (UserAccess)session.getAttribute("userAccess");
+            if (ua != null){
+                // if user is the owner of the msg delete it and display wallview jsp
+                // if someone else is the owner display the error-bad-action.html
+                if (ua.delete(Integer.parseInt((String)request.getParameter("index")))){
+                    return "/view/wallview.jsp";
+                } else {
+                    return "/error-bad-action.html";
+                }
+            }
             return "/error-not-loggedin.html";
         }
         
