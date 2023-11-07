@@ -28,6 +28,7 @@
     
     <%
         UserAccess ua = (UserAccess) request.getSession().getAttribute("userAccess");
+        
     %>
     
     <h3>user: <em><%=ua.getUser()%></em>

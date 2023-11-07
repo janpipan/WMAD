@@ -47,7 +47,7 @@ public class MessageWall_and_RemoteLogin_Impl implements RemoteLogin, MessageWal
   @Override
   public boolean delete(String user, int index) {
       Message msg = messages.get(index);
-      if (msg.getOwner() == user) {
+      if (msg.getOwner().equals(user)) {
           messages.remove(index);
           return true;
       } else {
