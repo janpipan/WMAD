@@ -129,7 +129,6 @@ public class SwingClient {
             argument_TextField.setText("");
             publisher_TextArea.setText(topicCheck.topic.name);
         } else {
-            
             topicManager.removePublisherFromTopic(publisherTopic);
         }
       
