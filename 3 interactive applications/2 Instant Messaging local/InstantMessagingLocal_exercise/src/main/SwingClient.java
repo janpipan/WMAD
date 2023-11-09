@@ -120,12 +120,20 @@ public class SwingClient {
   class newPublisherHandler implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
-      
-        Topic_check topicCheck = topicManager.isTopic(new Topic(argument_TextField.getText()));
         
-        publisherTopic = topicCheck.topic;
-        publisher = topicManager.addPublisherToTopic(publisherTopic);
-        argument_TextField.setText("");
+        if (publisher == null) {
+            Topic_check topicCheck = topicManager.isTopic(new Topic(argument_TextField.getText()));
+        
+            publisherTopic = topicCheck.topic;
+            publisher = topicManager.addPublisherToTopic(publisherTopic);
+            argument_TextField.setText("");
+            publisher_TextArea.setText(topicCheck.topic.name);
+        } else {
+            
+            topicManager.removePublisherFromTopic(publisherTopic);
+        }
+      
+        
       
     }
   }
@@ -137,7 +145,15 @@ public class SwingClient {
       Subscriber sub = new SubscriberImpl(SwingClient.this);
       Subscription_check sub_check = topicManager.subscribe(new Topic(argument_TextField.getText()),sub);
       //System.out.println(sub_check.result == );
-      //my_subscriptions.set(sub_check.topic)
+      if (sub_check.result == Subscription_check.Result.OKAY) {
+            my_subscriptions.put(sub_check.topic,sub);
+            StringBuilder subscriptionListText = new StringBuilder();
+            for (Topic topic : my_subscriptions.keySet()){
+                subscriptionListText.append(topic.getName() + "\n");
+            }
+            my_subscriptions_TextArea.setText(subscriptionListText.toString());
+      }
+      argument_TextField.setText("");
       
     }
   }
@@ -145,8 +161,18 @@ public class SwingClient {
   class UnsubscribeHandler implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
-      
-      //...
+        Topic topic = new Topic(argument_TextField.getText());
+        Subscriber sub = my_subscriptions.get(topic);
+        Subscription_check sub_check = topicManager.unsubscribe(topic, sub);
+        if (sub_check.result == Subscription_check.Result.OKAY) {
+            my_subscriptions.remove(topic);
+            StringBuilder subscriptionListText = new StringBuilder();
+            for (Topic top : my_subscriptions.keySet()){
+                subscriptionListText.append(top.getName() + "\n");
+            }
+            my_subscriptions_TextArea.setText(subscriptionListText.toString());
+        }
+      //
       
     }
   }
@@ -155,7 +181,8 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      publisher.publish(new Message(publisherTopic, argument_TextField.getText()));
+        publisher.publish(new Message(publisherTopic, argument_TextField.getText()));
+        argument_TextField.setText("");
       
     }
   }

@@ -51,7 +51,7 @@ public class PublisherImpl implements Publisher {
 
   @Override
   public void publish(Message message) {
-      for (Subscriber sub : this.subscriberSet){
+      for (Subscriber sub : subscriberSet){
           sub.onMessage(message);
       }
     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
