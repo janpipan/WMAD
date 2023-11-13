@@ -122,14 +122,21 @@ public class SwingClient {
     public void actionPerformed(ActionEvent e) {
         
         if (publisher == null) {
-            Topic_check topicCheck = topicManager.isTopic(new Topic(argument_TextField.getText()));
+            Topic topic = new Topic(argument_TextField.getText());
         
-            publisherTopic = topicCheck.topic;
+            publisherTopic = topic;
             publisher = topicManager.addPublisherToTopic(publisherTopic);
             argument_TextField.setText("");
-            publisher_TextArea.setText(topicCheck.topic.name);
+            publisher_TextArea.setText(topic.name);
         } else {
             topicManager.removePublisherFromTopic(publisherTopic);
+            
+            Topic topic = new Topic(argument_TextField.getText());
+            
+            publisherTopic = topic;
+            publisher = topicManager.addPublisherToTopic(publisherTopic);
+            argument_TextField.setText("");
+            publisher_TextArea.setText(topic.name);
         }
       
         
@@ -172,7 +179,7 @@ public class SwingClient {
             my_subscriptions_TextArea.setText(subscriptionListText.toString());
         }
       //
-      
+      argument_TextField.setText("");
     }
   }
 
