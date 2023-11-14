@@ -131,12 +131,21 @@ public class SwingClient {
         } else {
             topicManager.removePublisherFromTopic(publisherTopic);
             
-            Topic topic = new Topic(argument_TextField.getText());
+            // is user passes empty field remove him as publisher
+            if (argument_TextField.getText().equals("")){
+                publisherTopic = null;
+                publisher = null;
+                publisher_TextArea.setText("");
+            } else {
+                Topic topic = new Topic(argument_TextField.getText());
             
-            publisherTopic = topic;
-            publisher = topicManager.addPublisherToTopic(publisherTopic);
-            argument_TextField.setText("");
-            publisher_TextArea.setText(topic.name);
+                publisherTopic = topic;
+                publisher = topicManager.addPublisherToTopic(publisherTopic);
+                argument_TextField.setText("");
+                publisher_TextArea.setText(topic.name);
+            }
+            
+            
         }
       
         
@@ -148,18 +157,27 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      Subscriber sub = new SubscriberImpl(SwingClient.this);
-      Subscription_check sub_check = topicManager.subscribe(new Topic(argument_TextField.getText()),sub);
-      //System.out.println(sub_check.result == );
-      if (sub_check.result == Subscription_check.Result.OKAY) {
-            my_subscriptions.put(sub_check.topic,sub);
-            StringBuilder subscriptionListText = new StringBuilder();
-            for (Topic topic : my_subscriptions.keySet()){
-                subscriptionListText.append(topic.getName() + "\n");
+      
+      
+        if (!argument_TextField.getText().equals("")){
+            Subscriber sub = new SubscriberImpl(SwingClient.this);
+            Topic top = new Topic(argument_TextField.getText());
+            Subscription_check sub_check = topicManager.subscribe(top,sub);
+            //System.out.println(sub_check.result == );
+            if (sub_check.result == Subscription_check.Result.OKAY) {
+                my_subscriptions.put(sub_check.topic,sub);
+                StringBuilder subscriptionListText = new StringBuilder();
+                for (Topic topic : my_subscriptions.keySet()){
+                    subscriptionListText.append(topic.getName() + "\n");
+                }
+                my_subscriptions_TextArea.setText(subscriptionListText.toString());
+            } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
+                messages_TextArea.append("System: Topic " + top.getName() + " does not exist.");
             }
-            my_subscriptions_TextArea.setText(subscriptionListText.toString());
-      }
-      argument_TextField.setText("");
+            argument_TextField.setText("");
+        }
+      
+      
       
     }
   }
@@ -177,8 +195,11 @@ public class SwingClient {
                 subscriptionListText.append(top.getName() + "\n");
             }
             my_subscriptions_TextArea.setText(subscriptionListText.toString());
+        } else if (sub_check.result == Subscription_check.Result.NO_SUBSCRIPTION){
+            messages_TextArea.append("System: You are not subscribed to " + topic.getName() + ".");
+        } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
+            messages_TextArea.append("System: Topic " + topic.getName() + " does not exist.");
         }
-      //
       argument_TextField.setText("");
     }
   }
@@ -186,9 +207,14 @@ public class SwingClient {
   class postEventHandler implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
-      
-        publisher.publish(new Message(publisherTopic, argument_TextField.getText()));
+        
+        if (publisher != null) {
+            publisher.publish(new Message(publisherTopic, argument_TextField.getText()));
+        } else {
+            messages_TextArea.append("System: You are not a Publisher.");
+        }
         argument_TextField.setText("");
+        
       
     }
   }
@@ -223,9 +249,13 @@ public class SwingClient {
 
     public void windowClosing(WindowEvent e) {
       
-      //...
+        if (publisher != null) {
+            topicManager.removePublisherFromTopic(publisherTopic);
+            publisher = null;
+            publisherTopic = null;
+        }
       
-      System.out.println("one user closed");
+        System.out.println("one user closed");
     }
   }
 }
