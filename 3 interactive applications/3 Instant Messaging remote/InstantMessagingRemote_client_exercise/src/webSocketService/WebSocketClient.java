@@ -43,8 +43,13 @@ public class WebSocketClient {
 
   public static synchronized void addSubscriber(Topic topic, Subscriber subscriber) {
     try {
+        
+        Subscription_request sub_req = new Subscription_request(topic, Subscription_request.Type.ADD);
+        
+        Gson gson = new Gson();
+        String json = gson.toJson(sub_req);
       
-      //...
+        session.getBasicRemote().sendText(json);
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -54,7 +59,12 @@ public class WebSocketClient {
   public static synchronized void removeSubscriber(Topic topic) {
     try {
       
-      //...
+        Subscription_request sub_req = new Subscription_request(topic, Subscription_request.Type.REMOVE);
+        
+        Gson gson = new Gson();
+        String json = gson.toJson(sub_req);
+      
+        session.getBasicRemote().sendText(json);
       
     } catch (Exception e) {
       e.printStackTrace();

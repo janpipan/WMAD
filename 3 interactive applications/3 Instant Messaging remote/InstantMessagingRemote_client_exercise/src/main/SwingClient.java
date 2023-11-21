@@ -106,7 +106,13 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      java.util.List<Topic> topicList = topicManager.topics();
+      
+      StringBuilder topicListText = new StringBuilder();
+      for (Topic topic : topicList){
+          topicListText.append(topic.name + "\n");
+      }
+      topic_list_TextArea.setText(topicListText.toString());
       
     }
   }
@@ -114,8 +120,35 @@ public class SwingClient {
   class newPublisherHandler implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
+        
+        if (publisher == null) {
+            Topic topic = new Topic(argument_TextField.getText());
+        
+            publisherTopic = topic;
+            publisher = topicManager.addPublisherToTopic(publisherTopic);
+            argument_TextField.setText("");
+            publisher_TextArea.setText(topic.name);
+        } else {
+            topicManager.removePublisherFromTopic(publisherTopic);
+            
+            // is user passes empty field remove him as publisher
+            if (argument_TextField.getText().equals("")){
+                publisherTopic = null;
+                publisher = null;
+                publisher_TextArea.setText("");
+            } else {
+                Topic topic = new Topic(argument_TextField.getText());
+            
+                publisherTopic = topic;
+                publisher = topicManager.addPublisherToTopic(publisherTopic);
+                argument_TextField.setText("");
+                publisher_TextArea.setText(topic.name);
+            }
+            
+            
+        }
       
-      //...
+        
       
     }
   }
@@ -124,7 +157,27 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      
+      
+        if (!argument_TextField.getText().equals("")){
+            Subscriber sub = new SubscriberImpl(SwingClient.this);
+            Topic top = new Topic(argument_TextField.getText());
+            Subscription_check sub_check = topicManager.subscribe(top,sub);
+            //System.out.println(sub_check.result == );
+            if (sub_check.result == Subscription_check.Result.OKAY) {
+                my_subscriptions.put(sub_check.topic,sub);
+                StringBuilder subscriptionListText = new StringBuilder();
+                for (Topic topic : my_subscriptions.keySet()){
+                    subscriptionListText.append(topic.name + "\n");
+                }
+                my_subscriptions_TextArea.setText(subscriptionListText.toString());
+            } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
+                messages_TextArea.append("System: Topic " + top.name + " does not exist.\n");
+            }
+            argument_TextField.setText("");
+        }
+      
+      
       
     }
   }
@@ -132,17 +185,36 @@ public class SwingClient {
   class UnsubscribeHandler implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
-      
-      //...
-      
+        Topic topic = new Topic(argument_TextField.getText());
+        Subscriber sub = my_subscriptions.get(topic);
+        Subscription_check sub_check = topicManager.unsubscribe(topic, sub);
+        if (sub_check.result == Subscription_check.Result.OKAY) {
+            my_subscriptions.remove(topic);
+            StringBuilder subscriptionListText = new StringBuilder();
+            for (Topic top : my_subscriptions.keySet()){
+                subscriptionListText.append(top.name + "\n");
+            }
+            my_subscriptions_TextArea.setText(subscriptionListText.toString());
+        } else if (sub_check.result == Subscription_check.Result.NO_SUBSCRIPTION){
+            messages_TextArea.append("System: You are not subscribed to " + topic.name + ".\n");
+        } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
+            messages_TextArea.append("System: Topic " + topic.name + " does not exist.\n");
+        }
+      argument_TextField.setText("");
     }
   }
 
   class postEventHandler implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
-      
-      //...
+        
+        if (publisher != null) {
+            publisher.publish(new Message(publisherTopic, argument_TextField.getText()));
+        } else {
+            messages_TextArea.append("System: You are not a Publisher.\n");
+        }
+        argument_TextField.setText("");
+        
       
     }
   }
@@ -180,7 +252,18 @@ public class SwingClient {
 
     public void windowClosing(WindowEvent e) {
       
-      //...
+      if (publisher != null) {
+            topicManager.removePublisherFromTopic(publisherTopic);
+            publisher = null;
+            publisherTopic = null;
+        } 
+        
+        if (!my_subscriptions.isEmpty()) {
+            for (Map.Entry<Topic, Subscriber> subscription : my_subscriptions.entrySet()) {
+                topicManager.unsubscribe(subscription.getKey(), subscription.getValue());
+            }
+            my_subscriptions.clear();
+        }
       
       System.out.println("one user closed");
       System.exit(0);

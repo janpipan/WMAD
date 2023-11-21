@@ -23,27 +23,42 @@ public class PublisherImpl implements Publisher {
 
   @Override
   public void incPublishers() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       this.numPublishers++;
+    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public int decPublishers() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      return --this.numPublishers;
+    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public void attachSubscriber(Subscriber subscriber) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      this.subscriberSet.add(subscriber);
+    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public boolean detachSubscriber(Subscriber subscriber) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      // if subscriber is subscribed to publisher send on close cause as subscriber 
+      // and remove him from subscriber set
+      // if he is not in subscriber set return false
+      if (this.subscriberSet.contains(subscriber)){
+          subscriber.onClose(new Subscription_close(topic, Subscription_close.Cause.SUBSCRIBER));
+        return this.subscriberSet.remove(subscriber);
+      }
+      return false;
+      //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public void detachAllSubscribers() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      for (Subscriber sub : subscriberSet) {
+          sub.onClose(new Subscription_close(topic, Subscription_close.Cause.PUBLISHER));
+      }
+      this.subscriberSet.clear();
+    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override

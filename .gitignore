@@ -4,3 +4,6 @@
 *.DS_Store
 /3 interactive applications/2 Instant Messaging local/InstantMessagingLocal_exercise/build/
 /3 interactive applications/1 Message Wall/MessageWall_exercise/dist/
+/3 interactive applications/3 Instant Messaging remote/InstantMessagingRemote_server_exercise/build/
+/3 interactive applications/3 Instant Messaging remote/InstantMessagingRemote_client_exercise/build/
+/3 interactive applications/3 Instant Messaging remote/InstantMessagingRemote_client_exercise/dist/
