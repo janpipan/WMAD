@@ -5,9 +5,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/util/Topic_check.java</file>
-            <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/util/Topic.java</file>
             <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/topicmanager/TopicManagerImpl.java</file>
+            <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/util/Topic.java</file>
             <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/main/SwingClient.java</file>
+            <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/util/Subscription_close.java</file>
+            <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/util/Message.java</file>
+            <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/subscriber/SubscriberImpl.java</file>
+            <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/publisher/PublisherImpl.java</file>
+            <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/util/Subscription_check.java</file>
+            <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/subscriber/Subscriber.java</file>
+            <file>file:/home/entel/exercises/3%20interactive%20applications/2%20Instant%20Messaging%20local/InstantMessagingLocal_exercise/src/topicmanager/TopicManager.java</file>
         </group>
     </open-files>
 </project-private>

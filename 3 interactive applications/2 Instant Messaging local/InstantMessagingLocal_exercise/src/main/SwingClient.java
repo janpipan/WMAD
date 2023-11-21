@@ -172,7 +172,7 @@ public class SwingClient {
                 }
                 my_subscriptions_TextArea.setText(subscriptionListText.toString());
             } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
-                messages_TextArea.append("System: Topic " + top.getName() + " does not exist.");
+                messages_TextArea.append("System: Topic " + top.getName() + " does not exist.\n");
             }
             argument_TextField.setText("");
         }
@@ -196,9 +196,9 @@ public class SwingClient {
             }
             my_subscriptions_TextArea.setText(subscriptionListText.toString());
         } else if (sub_check.result == Subscription_check.Result.NO_SUBSCRIPTION){
-            messages_TextArea.append("System: You are not subscribed to " + topic.getName() + ".");
+            messages_TextArea.append("System: You are not subscribed to " + topic.getName() + ".\n");
         } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
-            messages_TextArea.append("System: Topic " + topic.getName() + " does not exist.");
+            messages_TextArea.append("System: Topic " + topic.getName() + " does not exist.\n");
         }
       argument_TextField.setText("");
     }
@@ -211,7 +211,7 @@ public class SwingClient {
         if (publisher != null) {
             publisher.publish(new Message(publisherTopic, argument_TextField.getText()));
         } else {
-            messages_TextArea.append("System: You are not a Publisher.");
+            messages_TextArea.append("System: You are not a Publisher.\n");
         }
         argument_TextField.setText("");
         
@@ -253,6 +253,13 @@ public class SwingClient {
             topicManager.removePublisherFromTopic(publisherTopic);
             publisher = null;
             publisherTopic = null;
+        } 
+        
+        if (!my_subscriptions.isEmpty()) {
+            for (Map.Entry<Topic, Subscriber> subscription : my_subscriptions.entrySet()) {
+                topicManager.unsubscribe(subscription.getKey(), subscription.getValue());
+            }
+            my_subscriptions.clear();
         }
       
         System.out.println("one user closed");

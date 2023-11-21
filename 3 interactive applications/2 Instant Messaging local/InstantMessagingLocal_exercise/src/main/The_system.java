@@ -28,5 +28,11 @@ public class The_system {
                         client.createAndShowGUI();
                 }
         });
+        javax.swing.SwingUtilities.invokeLater( new Runnable() {
+                public void run() {
+                        SwingClient client = new SwingClient(topicManager);
+                        client.createAndShowGUI();
+                }
+        });
     }
 }
