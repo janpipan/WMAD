@@ -37,6 +37,7 @@ public class WebSocketServer {
         if (subscriber == null) {
           subscriber = new SubscriberImpl(session);
           global.getTopicManager().subscribe(s_req.topic, subscriber);
+          System.out.println("subscriber added");
         }
       }
     } else if (s_req.type == Subscription_request.Type.REMOVE) {

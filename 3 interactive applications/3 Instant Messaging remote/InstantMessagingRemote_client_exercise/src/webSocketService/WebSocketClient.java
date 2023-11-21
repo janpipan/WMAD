@@ -79,14 +79,18 @@ public class WebSocketClient {
 
     //ordinary message from topic:
     if (subs_close.cause==null) {
+        
+        
       
-      //...
       
     }
     //ending subscription message:
     else {
-      
-      //...
+        try {
+            session.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
       
     } 
   }

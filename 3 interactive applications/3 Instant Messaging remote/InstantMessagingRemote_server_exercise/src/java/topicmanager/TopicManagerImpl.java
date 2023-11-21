@@ -28,6 +28,7 @@ public class TopicManagerImpl implements TopicManager {
           pub = topicMap.get(tc.topic);
           pub.incPublishers();
       } else {
+          System.out.println("new publisher created");
           pub = new PublisherImpl(tc.topic);
           topicMap.put(tc.topic, pub);
       }
