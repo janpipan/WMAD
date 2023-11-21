@@ -50,6 +50,10 @@ public class WebSocketClient {
         String json = gson.toJson(sub_req);
       
         session.getBasicRemote().sendText(json);
+        
+        subscriberMap.put(topic, subscriber);
+        
+        
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -80,7 +84,12 @@ public class WebSocketClient {
     //ordinary message from topic:
     if (subs_close.cause==null) {
         
+        Message msg = new Gson().fromJson(json, Message.class);
         
+        if (msg != null){
+            Subscriber sub = subscriberMap.get(msg.topic);
+            sub.onMessage(msg);
+        }
       
       
     }
