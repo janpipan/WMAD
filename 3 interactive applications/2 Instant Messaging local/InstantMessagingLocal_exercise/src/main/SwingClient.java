@@ -142,13 +142,15 @@ public class SwingClient {
         } else {
             
             Topic topic = new Topic(argument_TextField.getText());
-
-            publisherTopic = topic;
-            publisher = topicManager.addPublisherToTopic(publisherTopic);
+            
+            if (!publisherTopic.equals(topic)){
+                topicManager.removePublisherFromTopic(publisherTopic);
+                publisher = topicManager.addPublisherToTopic(topic);
+                publisherTopic = topic;
+                publisher_TextArea.setText(topic.name);
+                
+            }
             argument_TextField.setText("");
-            publisher_TextArea.setText(topic.name);
-            
-            
         }
       
         
