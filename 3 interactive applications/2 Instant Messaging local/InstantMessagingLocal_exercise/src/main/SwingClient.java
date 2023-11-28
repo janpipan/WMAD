@@ -158,7 +158,7 @@ public class SwingClient {
   
   class removePublisherHandler implements ActionListener {
       public void actionPerformed(ActionEvent e) {
-          if (publisher != null && publisherTopic.equals(new Topic(argument_TextField.getText()))) {
+          if (publisher != null) {
                 topicManager.removePublisherFromTopic(publisherTopic);
                 publisherTopic = null;
                 publisher = null;
