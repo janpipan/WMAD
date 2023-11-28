@@ -50,21 +50,26 @@ public class SwingClient {
 
     JButton show_topics_button = new JButton("show Topics");
     JButton new_publisher_button = new JButton("new Publisher");
+    JButton remove_publisher = new JButton("remove Publisher");
     JButton new_subscriber_button = new JButton("new Subscriber");
     JButton to_unsubscribe_button = new JButton("to unsubscribe");
     JButton to_post_an_event_button = new JButton("post an event");
     JButton to_close_the_app = new JButton("close app.");
+    
 
     show_topics_button.addActionListener(new showTopicsHandler());
     new_publisher_button.addActionListener(new newPublisherHandler());
+    remove_publisher.addActionListener(new removePublisherHandler());
     new_subscriber_button.addActionListener(new newSubscriberHandler());
     to_unsubscribe_button.addActionListener(new UnsubscribeHandler());
     to_post_an_event_button.addActionListener(new postEventHandler());
     to_close_the_app.addActionListener(new CloseAppHandler());
+    
 
     JPanel buttonsPannel = new JPanel(new FlowLayout());
     buttonsPannel.add(show_topics_button);
     buttonsPannel.add(new_publisher_button);
+    buttonsPannel.add(remove_publisher);
     buttonsPannel.add(new_subscriber_button);
     buttonsPannel.add(to_unsubscribe_button);
     buttonsPannel.add(to_post_an_event_button);
@@ -122,28 +127,26 @@ public class SwingClient {
     public void actionPerformed(ActionEvent e) {
         
         if (publisher == null) {
-            Topic topic = new Topic(argument_TextField.getText());
+            String inputText = argument_TextField.getText();
+            if (!inputText.equals("")){
+                Topic topic = new Topic(inputText);
         
-            publisherTopic = topic;
-            publisher = topicManager.addPublisherToTopic(publisherTopic);
-            argument_TextField.setText("");
-            publisher_TextArea.setText(topic.name);
-        } else {
-            topicManager.removePublisherFromTopic(publisherTopic);
-            
-            // is user passes empty field remove him as publisher
-            if (argument_TextField.getText().equals("")){
-                publisherTopic = null;
-                publisher = null;
-                publisher_TextArea.setText("");
-            } else {
-                Topic topic = new Topic(argument_TextField.getText());
-            
                 publisherTopic = topic;
                 publisher = topicManager.addPublisherToTopic(publisherTopic);
                 argument_TextField.setText("");
                 publisher_TextArea.setText(topic.name);
+            } else {
+                messages_TextArea.append("System: Please enter valid topic.\n");
             }
+            
+        } else {
+            
+            Topic topic = new Topic(argument_TextField.getText());
+
+            publisherTopic = topic;
+            publisher = topicManager.addPublisherToTopic(publisherTopic);
+            argument_TextField.setText("");
+            publisher_TextArea.setText(topic.name);
             
             
         }
@@ -151,6 +154,20 @@ public class SwingClient {
         
       
     }
+  }
+  
+  class removePublisherHandler implements ActionListener {
+      public void actionPerformed(ActionEvent e) {
+          if (publisher != null && publisherTopic.equals(new Topic(argument_TextField.getText()))) {
+                topicManager.removePublisherFromTopic(publisherTopic);
+                publisherTopic = null;
+                publisher = null;
+                publisher_TextArea.setText("");
+          } else {
+              messages_TextArea.append("System: You are not Publisher.\n");
+          }
+          argument_TextField.setText("");
+      }
   }
 
   class newSubscriberHandler implements ActionListener {
@@ -162,19 +179,25 @@ public class SwingClient {
         if (!argument_TextField.getText().equals("")){
             Subscriber sub = new SubscriberImpl(SwingClient.this);
             Topic top = new Topic(argument_TextField.getText());
-            Subscription_check sub_check = topicManager.subscribe(top,sub);
-            //System.out.println(sub_check.result == );
-            if (sub_check.result == Subscription_check.Result.OKAY) {
-                my_subscriptions.put(sub_check.topic,sub);
-                StringBuilder subscriptionListText = new StringBuilder();
-                for (Topic topic : my_subscriptions.keySet()){
-                    subscriptionListText.append(topic.getName() + "\n");
+            if (my_subscriptions.containsKey(top)){
+                messages_TextArea.append("System: You are already subscribed to this topic.\n");
+            } else {
+                Subscription_check sub_check = topicManager.subscribe(top,sub);
+                //System.out.println(sub_check.result == );
+                if (sub_check.result == Subscription_check.Result.OKAY) {
+                    my_subscriptions.put(sub_check.topic,sub);
+                    StringBuilder subscriptionListText = new StringBuilder();
+                    for (Topic topic : my_subscriptions.keySet()){
+                        subscriptionListText.append(topic.getName() + "\n");
+                    }
+                    my_subscriptions_TextArea.setText(subscriptionListText.toString());
+                } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
+                    messages_TextArea.append("System: Topic " + top.getName() + " does not exist.\n");
                 }
-                my_subscriptions_TextArea.setText(subscriptionListText.toString());
-            } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
-                messages_TextArea.append("System: Topic " + top.getName() + " does not exist.\n");
             }
             argument_TextField.setText("");
+        } else {
+            messages_TextArea.append("System: Please enter valid topic.\n");
         }
       
       
@@ -209,7 +232,13 @@ public class SwingClient {
     public void actionPerformed(ActionEvent e) {
         
         if (publisher != null) {
-            publisher.publish(new Message(publisherTopic, argument_TextField.getText()));
+            String inputText = argument_TextField.getText();
+            // if input field is not empty send msg otherwise notify pusblisher
+            if (!inputText.equals("")) {
+                publisher.publish(new Message(publisherTopic, inputText));
+            } else {
+                messages_TextArea.append("System: Please enter a message.\n");
+            }
         } else {
             messages_TextArea.append("System: You are not a Publisher.\n");
         }
