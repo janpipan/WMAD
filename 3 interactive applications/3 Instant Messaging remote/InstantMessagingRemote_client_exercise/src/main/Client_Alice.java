@@ -10,7 +10,7 @@ import topicmanager.TopicManagerStub;
  *
  * @author juanluis
  */
-public class Client_John {
+public class Client_Alice {
 
   public static void main(String[] args) {
     
@@ -19,7 +19,7 @@ public class Client_John {
 
     javax.swing.SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-        SwingClient client = new SwingClient(new TopicManagerStub("john"));
+        SwingClient client = new SwingClient(new TopicManagerStub("alice"));
         client.createAndShowGUI();
       }
     });

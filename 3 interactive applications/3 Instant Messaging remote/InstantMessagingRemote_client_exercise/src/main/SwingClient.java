@@ -255,12 +255,14 @@ public class SwingClient {
     public void windowClosing(WindowEvent e) {
       
       if (publisher != null) {
+            System.out.println("removing publisher");
             topicManager.removePublisherFromTopic(publisherTopic);
             publisher = null;
             publisherTopic = null;
         } 
         
         if (!my_subscriptions.isEmpty()) {
+            System.out.println("removing subscriptions");
             for (Map.Entry<Topic, Subscriber> subscription : my_subscriptions.entrySet()) {
                 topicManager.unsubscribe(subscription.getKey(), subscription.getValue());
             }

@@ -14,6 +14,7 @@ import javax.websocket.OnMessage;
 import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 import subscriber.Subscriber;
+import util.Subscription_check;
 import util.Subscription_request;
 
 @ClientEndpoint
@@ -69,6 +70,8 @@ public class WebSocketClient {
         String json = gson.toJson(sub_req);
       
         session.getBasicRemote().sendText(json);
+        
+        subscriberMap.remove(topic);
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -80,11 +83,16 @@ public class WebSocketClient {
 
     Gson gson = new Gson();
     Subscription_close subs_close = gson.fromJson(json, Subscription_close.class);
+    System.out.println(json);
 
     //ordinary message from topic:
     if (subs_close.cause==null) {
         
-        Message msg = new Gson().fromJson(json, Message.class);
+        Message msg = gson.fromJson(json, Message.class);
+        //Subscription_check sub_check = gson.fromJson(json, Subscription_check.class);
+        
+        //System.out.println(msg);
+        //System.out.println(sub_check);
         
         if (msg != null){
             Subscriber sub = subscriberMap.get(msg.topic);
@@ -94,7 +102,8 @@ public class WebSocketClient {
       
     }
     //ending subscription message:
-    else {
+    else if (subs_close.cause == Subscription_close.Cause.PUBLISHER){
+        System.out.println("No more publishers");
         try {
             session.close();
         } catch (Exception e) {

@@ -15,6 +15,7 @@ import subscriber.SubscriberImpl;
 import util.Subscription_request;
 import publisher.Publisher;
 import util.Global;
+import util.Subscription_check;
 
 @ServerEndpoint("/ws")
 public class WebSocketServer {
@@ -27,6 +28,8 @@ public class WebSocketServer {
     throws IOException, SQLException {
 
     System.out.println("onMessage - Subscription_request: " + json);
+    
+    Gson gson = new Gson();
 
     Subscription_request s_req = new Gson().fromJson(json, Subscription_request.class);
 
@@ -36,16 +39,19 @@ public class WebSocketServer {
         Subscriber subscriber = publisher.subscriber(session);
         if (subscriber == null) {
           subscriber = new SubscriberImpl(session);
+          // send back to client if subscription was successful
+          //session.getBasicRemote().sendText(gson.toJson(global.getTopicManager().subscribe(s_req.topic, subscriber), Subscription_check.class));
           global.getTopicManager().subscribe(s_req.topic, subscriber);
           System.out.println("subscriber added");
         }
-      }
+      } 
     } else if (s_req.type == Subscription_request.Type.REMOVE) {
       Publisher publisher = global.getTopicManager().publisher(s_req.topic);
       if (publisher != null) {
         Subscriber subscriber = publisher.subscriber(session);
         if (subscriber != null) {
           global.getTopicManager().unsubscribe(s_req.topic, subscriber);
+          System.out.println("subscriber removed");
         }
       }
     }

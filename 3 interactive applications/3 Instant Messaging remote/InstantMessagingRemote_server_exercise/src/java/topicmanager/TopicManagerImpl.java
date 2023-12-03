@@ -40,6 +40,7 @@ public class TopicManagerImpl implements TopicManager {
   public void removePublisherFromTopic(Topic topic) {
       Publisher pub = topicMap.get(topic);
       int numOfPublishers = pub.decPublishers();
+      System.out.println(numOfPublishers);
       if (numOfPublishers == 0) {
           pub.detachAllSubscribers();
           topicMap.remove(topic);
