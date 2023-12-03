@@ -69,10 +69,15 @@ public class TopicManagerStub implements TopicManager {
   @Override
   public Subscription_check unsubscribe(Topic topic, Subscriber subscriber) {
       
+    // if subscribed
+    if (WebSocketClient.isSubscribed(topic)) {
+          WebSocketClient.removeSubscriber(topic);
+        return new Subscription_check(topic, Subscription_check.Result.OKAY);
+    }
+    
+    return new Subscription_check(topic, Subscription_check.Result.NO_SUBSCRIPTION);
       
-      WebSocketClient.removeSubscriber(topic);
-      return new Subscription_check(topic, Subscription_check.Result.OKAY);
-      //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
 }

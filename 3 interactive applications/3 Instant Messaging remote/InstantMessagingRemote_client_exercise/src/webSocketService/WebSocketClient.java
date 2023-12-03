@@ -77,22 +77,24 @@ public class WebSocketClient {
       e.printStackTrace();
     }
   }
+  
+  public static boolean isSubscribed(Topic topic) {
+      return subscriberMap.containsKey(topic);
+  }
 
   @OnMessage
   public void onMessage(String json) {
 
     Gson gson = new Gson();
     Subscription_close subs_close = gson.fromJson(json, Subscription_close.class);
+    
     System.out.println(json);
-
+    System.out.println(subs_close);
+    
     //ordinary message from topic:
     if (subs_close.cause==null) {
         
         Message msg = gson.fromJson(json, Message.class);
-        //Subscription_check sub_check = gson.fromJson(json, Subscription_check.class);
-        
-        //System.out.println(msg);
-        //System.out.println(sub_check);
         
         if (msg != null){
             Subscriber sub = subscriberMap.get(msg.topic);
@@ -103,7 +105,9 @@ public class WebSocketClient {
     }
     //ending subscription message:
     else if (subs_close.cause == Subscription_close.Cause.PUBLISHER){
-        System.out.println("No more publishers");
+        Subscriber sub = subscriberMap.get(subs_close.topic);
+        sub.onClose(subs_close);
+        //System.out.println("No more publishers");
         try {
             session.close();
         } catch (Exception e) {

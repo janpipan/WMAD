@@ -50,6 +50,7 @@ public class SwingClient {
 
     JButton show_topics_button = new JButton("show Topics");
     JButton new_publisher_button = new JButton("new Publisher");
+    JButton remove_publisher = new JButton("remove Publisher");
     JButton new_subscriber_button = new JButton("new Subscriber");
     JButton to_unsubscribe_button = new JButton("to unsubscribe");
     JButton to_post_an_event_button = new JButton("post an event");
@@ -57,6 +58,7 @@ public class SwingClient {
 
     show_topics_button.addActionListener(new showTopicsHandler());
     new_publisher_button.addActionListener(new newPublisherHandler());
+    remove_publisher.addActionListener(new removePublisherHandler());
     new_subscriber_button.addActionListener(new newSubscriberHandler());
     to_unsubscribe_button.addActionListener(new UnsubscribeHandler());
     to_post_an_event_button.addActionListener(new postEventHandler());
@@ -65,6 +67,7 @@ public class SwingClient {
     JPanel buttonsPannel = new JPanel(new FlowLayout());
     buttonsPannel.add(show_topics_button);
     buttonsPannel.add(new_publisher_button);
+    buttonsPannel.add(remove_publisher);
     buttonsPannel.add(new_subscriber_button);
     buttonsPannel.add(to_unsubscribe_button);
     buttonsPannel.add(to_post_an_event_button);
@@ -121,38 +124,39 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
         
-        if (publisher == null) {
-            Topic topic = new Topic(argument_TextField.getText());
-        
-            publisherTopic = topic;
-            publisher = topicManager.addPublisherToTopic(publisherTopic);
-            argument_TextField.setText("");
-            publisher_TextArea.setText(topic.name);
+        String inputText = argument_TextField.getText();
+        if (!inputText.equals("")){
+            Topic topic = new Topic(inputText);
+            if (publisher == null) {
+                publisher = topicManager.addPublisherToTopic(topic);
+                publisherTopic = topic;
+                publisher_TextArea.setText(topic.name);
+            } else if (!publisherTopic.equals(topic)) {
+                topicManager.removePublisherFromTopic(publisherTopic);
+                publisher = topicManager.addPublisherToTopic(topic);
+                publisherTopic = topic;
+                publisher_TextArea.setText(topic.name);
+            }
         } else {
-            topicManager.removePublisherFromTopic(publisherTopic);
-            
-            // is user passes empty field remove him as publisher
-            if (argument_TextField.getText().equals("")){
+            messages_TextArea.append("System: Please enter valid topic.\n");
+        }
+        argument_TextField.setText("");
+        
+    }
+  }
+  
+  class removePublisherHandler implements ActionListener {
+      public void actionPerformed(ActionEvent e) {
+          if (publisher != null) {
+                topicManager.removePublisherFromTopic(publisherTopic);
                 publisherTopic = null;
                 publisher = null;
                 publisher_TextArea.setText("");
-            } else {
-                Topic topic = new Topic(argument_TextField.getText());
-            
-                publisherTopic = topic;
-                publisher = topicManager.addPublisherToTopic(publisherTopic);
-                argument_TextField.setText("");
-                publisher_TextArea.setText(topic.name);
-            }
-            
-            
-        }
-        
-        
-      
-        
-      
-    }
+          } else {
+              messages_TextArea.append("System: You are not Publisher.\n");
+          }
+          argument_TextField.setText("");
+      }
   }
 
   class newSubscriberHandler implements ActionListener {
