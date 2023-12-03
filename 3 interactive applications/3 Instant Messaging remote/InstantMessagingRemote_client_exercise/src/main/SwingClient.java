@@ -181,6 +181,8 @@ public class SwingClient {
                 messages_TextArea.append("System: Topic " + top.name + " does not exist.\n");
             }
             argument_TextField.setText("");
+        } else {
+            messages_TextArea.append("System: Please enter a topic.\n");
         }
       
       
@@ -229,7 +231,20 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+        if (publisher != null) {
+            System.out.println("removing publisher");
+            topicManager.removePublisherFromTopic(publisherTopic);
+            publisher = null;
+            publisherTopic = null;
+        } 
+        
+        if (!my_subscriptions.isEmpty()) {
+            System.out.println("removing subscriptions");
+            for (Map.Entry<Topic, Subscriber> subscription : my_subscriptions.entrySet()) {
+                topicManager.unsubscribe(subscription.getKey(), subscription.getValue());
+            }
+            my_subscriptions.clear();
+        }
       
       System.out.println("one user closed");
       System.exit(0);

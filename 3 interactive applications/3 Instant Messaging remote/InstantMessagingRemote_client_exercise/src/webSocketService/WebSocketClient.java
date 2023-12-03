@@ -34,9 +34,9 @@ public class WebSocketClient {
     }
   }
   
-  public static void close() {
+  public static void close() { 
     try {
-      session.close();
+        session.close();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -88,9 +88,6 @@ public class WebSocketClient {
     Gson gson = new Gson();
     Subscription_close subs_close = gson.fromJson(json, Subscription_close.class);
     
-    System.out.println(json);
-    System.out.println(subs_close);
-    
     //ordinary message from topic:
     if (subs_close.cause==null) {
         
@@ -100,19 +97,11 @@ public class WebSocketClient {
             Subscriber sub = subscriberMap.get(msg.topic);
             sub.onMessage(msg);
         }
-      
-      
     }
     //ending subscription message:
     else if (subs_close.cause == Subscription_close.Cause.PUBLISHER){
         Subscriber sub = subscriberMap.get(subs_close.topic);
         sub.onClose(subs_close);
-        //System.out.println("No more publishers");
-        try {
-            session.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
       
     } 
   }
