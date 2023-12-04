@@ -12,6 +12,7 @@ import entity.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.Consumes;
@@ -45,14 +46,27 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
     // set the topic retrieved from the query into the argument
     // of the method create, entity, to be saved as a new publisher:
     
-    // ...
+    Query q = em.createNamedQuery("Topic.findByName");
+    q.setParameter("name",entity.getTopic().getName());
+    
+    List<Topic> topics = q.getResultList();
+    if (topics.isEmpty()) {
+        Topic topic = new Topic();
+        topic.setName(entity.getTopic().getName());
+        em.persist(topic);
+        em.flush();
+    } else {
+        entity.setTopic(topics.get(0));
+    }
+    
+    super.create(entity);
     
     
     // then, create the new publisher for that topic, or
     // modify it, if he/she was publisher of a previous topic:
     
     // ...
-    throw new RuntimeException("To be completed by the student");
+    //throw new RuntimeException("To be completed by the student");
     
   }
 
@@ -88,8 +102,17 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
     
     // retrieve if the user is publisher of any topic:
     
+    try {
+        Query q = em.createQuery("SELECT p FROM Publisher p WHERE p.user = :user");
+        q.setParameter("user", entity);
+        return (Publisher) q.getSingleResult();
+    } catch (NoResultException e) {
+        return null;
+    }
+    
+    
     // ...
-    throw new RuntimeException("To be completed by the student");
+    //throw new RuntimeException("To be completed by the student");
     
   }
 

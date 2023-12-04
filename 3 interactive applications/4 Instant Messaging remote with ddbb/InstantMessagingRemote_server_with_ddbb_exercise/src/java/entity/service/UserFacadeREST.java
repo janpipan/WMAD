@@ -9,6 +9,7 @@ import entity.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.Consumes;
@@ -42,7 +43,15 @@ public class UserFacadeREST extends AbstractFacade<User> {
     // user at the User table:
     
     // ...
-    throw new RuntimeException("To be completed by the student");
+    Query q = em.createNamedQuery("User.findByLogin");
+    q.setParameter("login", entity.getLogin());
+    User user = (User) q.getSingleResult();
+    System.out.println(user);
+    if (user != null){
+        return user;
+    }
+    return new User();
+    //throw new RuntimeException("To be completed by the student");
     
   }
   
@@ -56,7 +65,16 @@ public class UserFacadeREST extends AbstractFacade<User> {
     // check out if a user with that login and password is defined at the User table,
     // return that user or null, accordingly:
     // ...
-    throw new RuntimeException("To be completed by the student");
+    try {
+        Query q = em.createQuery("SELECT u FROM User u WHERE u.login = :login AND u.password = :password");
+        q.setParameter("login", login.login);
+        q.setParameter("password", login.password);
+        return (User) q.getSingleResult();
+    } catch (NoResultException e) {
+        return null;
+    }
+    
+    //throw new RuntimeException("To be completed by the student");
     
   }
 

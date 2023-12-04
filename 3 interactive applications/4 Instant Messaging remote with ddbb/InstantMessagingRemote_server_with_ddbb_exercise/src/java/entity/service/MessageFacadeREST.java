@@ -49,7 +49,13 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
     // action.
     
     // ...
-    throw new RuntimeException("To be completed by the student");
+    
+    Query q = em.createNamedQuery("Topic.findByName");
+    q.setParameter("name", entity.getTopic().getName());
+    System.out.println(q.getSingleResult());
+    
+    
+    //throw new RuntimeException("To be completed by the student");
     
   }
 

@@ -110,7 +110,17 @@ public class SwingClient {
   private void clientSetup() {
     //this is where you restore the user profile:
     
-    //...
+    publisher = topicManager.publisherOf();
+    if (publisher != null) {
+        publisherTopic = publisher.topic();
+    }
+    
+    //List<entity.Subscriber> subscriptions = topicManager.mySubscriptions();
+    
+    /* TO DO */
+    
+    /* Set my subscriptions */
+    
     
   }
 
@@ -118,7 +128,13 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      java.util.List<Topic> topicList = topicManager.topics();
+      
+      StringBuilder topicListText = new StringBuilder();
+      for (Topic topic : topicList){
+          topicListText.append(topic.name + "\n");
+      }
+      topic_list_TextArea.setText(topicListText.toString());
     
     }
   }
@@ -127,7 +143,23 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      String inputText = argument_TextField.getText();
+        if (!inputText.equals("")){
+            Topic topic = new Topic(inputText);
+            if (publisher == null) {
+                publisher = topicManager.addPublisherToTopic(topic);
+                publisherTopic = topic;
+                publisher_TextArea.setText(topic.name);
+            } else if (!publisherTopic.equals(topic)) {
+                topicManager.removePublisherFromTopic(publisherTopic);
+                publisher = topicManager.addPublisherToTopic(topic);
+                publisherTopic = topic;
+                publisher_TextArea.setText(topic.name);
+            }
+        } else {
+            messages_TextArea.append("System: Please enter valid topic.\n");
+        }
+        argument_TextField.setText("");
     
     }
   }
@@ -136,7 +168,25 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      if (!argument_TextField.getText().equals("")){
+            Subscriber sub = new SubscriberImpl(SwingClient.this);
+            Topic top = new Topic(argument_TextField.getText());
+            Subscription_check sub_check = topicManager.subscribe(top,sub);
+            //System.out.println(sub_check.result == );
+            if (sub_check.result == Subscription_check.Result.OKAY) {
+                my_subscriptions.put(sub_check.topic,sub);
+                StringBuilder subscriptionListText = new StringBuilder();
+                for (Topic topic : my_subscriptions.keySet()){
+                    subscriptionListText.append(topic.name + "\n");
+                }
+                my_subscriptions_TextArea.setText(subscriptionListText.toString());
+            } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
+                messages_TextArea.append("System: Topic " + top.name + " does not exist.\n");
+            }
+            argument_TextField.setText("");
+        } else {
+            messages_TextArea.append("System: Please enter a topic.\n");
+        }
     
     }
   }
@@ -145,7 +195,22 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      Topic topic = new Topic(argument_TextField.getText());
+        Subscriber sub = my_subscriptions.get(topic);
+        Subscription_check sub_check = topicManager.unsubscribe(topic, sub);
+        if (sub_check.result == Subscription_check.Result.OKAY) {
+            my_subscriptions.remove(topic);
+            StringBuilder subscriptionListText = new StringBuilder();
+            for (Topic top : my_subscriptions.keySet()){
+                subscriptionListText.append(top.name + "\n");
+            }
+            my_subscriptions_TextArea.setText(subscriptionListText.toString());
+        } else if (sub_check.result == Subscription_check.Result.NO_SUBSCRIPTION){
+            messages_TextArea.append("System: You are not subscribed to " + topic.name + ".\n");
+        } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
+            messages_TextArea.append("System: Topic " + topic.name + " does not exist.\n");
+        }
+      argument_TextField.setText("");
     
     }
   }
@@ -154,7 +219,12 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      if (publisher != null) {
+            publisher.publish(new Message(publisherTopic, argument_TextField.getText()));
+        } else {
+            messages_TextArea.append("System: You are not a Publisher.\n");
+        }
+        argument_TextField.setText("");
     
     }
   }
