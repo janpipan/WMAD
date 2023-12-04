@@ -41,29 +41,40 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
   @Consumes({"application/xml", "application/json"})
   @Produces({"application/xml", "application/json"})
   public void create(Publisher entity) {
+      
+      // first, create the topic if necessary, otherwise
+      // set the topic retrieved from the query into the argument
+      // of the method create, entity, to be saved as a new publisher:
+      
+      String topicName = entity.getTopic().getName();
+      Query q = em.createNamedQuery("Topic.findByName");
+      q.setParameter("name",topicName);
+      List<Topic> topicList = q.getResultList();
+      
+      if (topicList.isEmpty()) {
+          em.persist(entity.getTopic());
+          em.flush();
+      }else {
+          entity.setTopic(topicList.get(0));
+      }
+      
+      // then, create the new publisher for that topic, or
+      // modify it, if he/she was publisher of a previous topic:
+
+      q = em.createQuery("SELECT p FROM Publisher p WHERE p.user = :user");
+      q.setParameter("user", entity.getUser());
+      List<Publisher> publisherList = q.getResultList();
+      
+      if (publisherList.isEmpty()) {
+          super.create(entity);
+      } else {
+          super.edit(entity);
+      }
+      
     
-    // first, create the topic if necessary, otherwise
-    // set the topic retrieved from the query into the argument
-    // of the method create, entity, to be saved as a new publisher:
-    
-    Query q = em.createNamedQuery("Topic.findByName");
-    q.setParameter("name",entity.getTopic().getName());
-    
-    List<Topic> topics = q.getResultList();
-    if (topics.isEmpty()) {
-        Topic topic = new Topic();
-        topic.setName(entity.getTopic().getName());
-        em.persist(topic);
-        em.flush();
-    } else {
-        entity.setTopic(topics.get(0));
-    }
-    
-    super.create(entity);
     
     
-    // then, create the new publisher for that topic, or
-    // modify it, if he/she was publisher of a previous topic:
+    
     
     // ...
     //throw new RuntimeException("To be completed by the student");
