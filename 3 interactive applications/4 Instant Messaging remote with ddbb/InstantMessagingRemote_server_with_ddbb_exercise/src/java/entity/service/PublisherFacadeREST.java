@@ -70,11 +70,6 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
       } else {
           super.edit(entity);
       }
-      
-    
-    
-    
-    
     
     // ...
     //throw new RuntimeException("To be completed by the student");
@@ -88,19 +83,40 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
     
     // check out if the user is really a publisher:
     
-    // ...
+    Query q = em.createQuery("SELECT p FROM Publisher p WHERE p.user = :user");
+    q.setParameter("user", entity.getUser());
+    List<Publisher> publisherList = q.getResultList();
     
     // if that is the case, use the fresh new instance of Publisher
     // obtained from the query to the data base to delete that publisher:
     
-    // ...
+    if(!publisherList.isEmpty()) {
+        super.delete(publisherList.get(0));
+    }
     
     // check if it was the last publisher of that topic, if so, delete the
     // topic from the Topic table, and notify all the currently connected
     // clients, using the WebSocketServer, about the topic been closed:
     
-    // ...
-    throw new RuntimeException("To be completed by the student");
+    String topicName = entity.getTopic().getName();
+    q = em.createNamedQuery("Topic.findByName");
+    q.setParameter("name", topicName);
+    List<Topic> topicList = q.getResultList();
+    
+    if (!topicList.isEmpty()) {
+        Topic topic = topicList.get(0);
+        q = em.createQuery("SELECT p FROM Publisher p WHERE p.topic = :topic");
+        q.setParameter("topic", topic);
+        
+        if(q.getResultList().isEmpty()){
+            q = em.createQuery("DELETE FROM Topic t WHERE t.name = :name");
+            q.setParameter("name", topic.getName());
+            q.executeUpdate();
+        }
+        
+    }
+    
+    //throw new RuntimeException("To be completed by the student");
     
     
   }

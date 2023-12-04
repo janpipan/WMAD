@@ -52,6 +52,7 @@ public class SwingClient {
 
     JButton show_topics_button = new JButton("show Topics");
     JButton new_publisher_button = new JButton("new Publisher");
+    JButton remove_publisher = new JButton("remove Publisher");
     JButton new_subscriber_button = new JButton("new Subscriber");
     JButton to_unsubscribe_button = new JButton("to unsubscribe");
     JButton to_post_an_event_button = new JButton("post an event");
@@ -59,6 +60,7 @@ public class SwingClient {
 
     show_topics_button.addActionListener(new showTopicsHandler());
     new_publisher_button.addActionListener(new newPublisherHandler());
+    remove_publisher.addActionListener(new removePublisherHandler());
     new_subscriber_button.addActionListener(new newSubscriberHandler());
     to_unsubscribe_button.addActionListener(new UnsubscribeHandler());
     to_post_an_event_button.addActionListener(new postEventHandler());
@@ -67,6 +69,7 @@ public class SwingClient {
     JPanel buttonsPannel = new JPanel(new FlowLayout());
     buttonsPannel.add(show_topics_button);
     buttonsPannel.add(new_publisher_button);
+    buttonsPannel.add(remove_publisher);
     buttonsPannel.add(new_subscriber_button);
     buttonsPannel.add(to_unsubscribe_button);
     buttonsPannel.add(to_post_an_event_button);
@@ -162,6 +165,20 @@ public class SwingClient {
         argument_TextField.setText("");
     
     }
+  }
+  
+  class removePublisherHandler implements ActionListener {
+      public void actionPerformed(ActionEvent e) {
+          if (publisher != null) {
+                topicManager.removePublisherFromTopic(publisherTopic);
+                publisherTopic = null;
+                publisher = null;
+                publisher_TextArea.setText("");
+          } else {
+              messages_TextArea.append("System: You are not Publisher.\n");
+          }
+          argument_TextField.setText("");
+      }
   }
 
   class newSubscriberHandler implements ActionListener {
