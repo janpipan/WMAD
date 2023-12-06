@@ -119,9 +119,9 @@ public class SwingClient {
         publisher_TextArea.setText(publisherTopic.name);
     }
     
+    /* Set my subscriptions */
     List<entity.Subscriber> subscriptions = topicManager.mySubscriptions();
     
-    /* Set my subscriptions */
     
     for (entity.Subscriber subscription : subscriptions) {
         Subscriber sub = new SubscriberImpl(SwingClient.this);
