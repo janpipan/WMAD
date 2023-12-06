@@ -71,7 +71,7 @@ public class WebSocketClient {
       
         session.getBasicRemote().sendText(json);
         
-        subscriberMap.remove(topic);
+        
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -99,9 +99,10 @@ public class WebSocketClient {
         }
     }
     //ending subscription message:
-    else if (subs_close.cause == Subscription_close.Cause.PUBLISHER){
+    else{
         Subscriber sub = subscriberMap.get(subs_close.topic);
         sub.onClose(subs_close);
+        subscriberMap.remove(subs_close.topic);
       
     } 
   }
