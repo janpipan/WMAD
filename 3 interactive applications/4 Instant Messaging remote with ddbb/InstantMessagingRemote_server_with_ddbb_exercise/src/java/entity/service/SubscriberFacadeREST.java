@@ -43,18 +43,22 @@ public class SubscriberFacadeREST extends AbstractFacade<Subscriber> {
     // first, check out if the topic from which to subscribe is defined at
     // the Topic table, otherwise return the corresponding message:
     
-    String topicName = entity.getTopic().getName();
-    Query q = em.createQuery("SELECT t FROM Topic t WHERE t.name = :name");
-    q.setParameter("name", topicName);
+    Query q = em.createNamedQuery("Topic.findByName");
+    q.setParameter("name", entity.getTopic().getName());
     List<Topic> topicList = q.getResultList();
+    // if retsult list is empty the topic does not exist return NO_TOPIC subscription check
     if (topicList.isEmpty()) {
         return new Subscription_check(entity.getTopic(),Subscription_check.Result.NO_TOPIC);
     }
     
+    // set subscriber topic to already existing topic and check if he is already
+    // subscribed to the topic
     entity.setTopic(topicList.get(0));
-    q = em.createQuery("SELECT s FROM Subscriber s WHERE s.user = :user AND s.topic = :topic");
+    q = em.createNamedQuery("Subscriber.findByUserAndTopic");
     q.setParameter("user", entity.getUser());
     q.setParameter("topic", entity.getTopic());
+    // if subscriber is not subscribed to the topic yet add him to subscriber table
+    // and afterwards return OKAY subscription check in either case
     if (q.getResultList().isEmpty()){
         super.create(entity);
     }
@@ -75,11 +79,11 @@ public class SubscriberFacadeREST extends AbstractFacade<Subscriber> {
     // first, check out if the topic from which to unsubscribe is defined at
     // the Topic table, otherwise return the corresponding message:
     
-    String topicName = entity.getTopic().getName();
-    Query q = em.createQuery("SELECT t FROM Topic t WHERE t.name = :name");
-    q.setParameter("name", topicName);
+    Query q = em.createNamedQuery("Topic.findByName");
+    q.setParameter("name", entity.getTopic().getName());
     List<Topic> topicList = q.getResultList();
     
+    // if there is no topic in db return return NO_TOPIC subscription check
     if (topicList.isEmpty()) {
         return new Subscription_check(entity.getTopic(),Subscription_check.Result.NO_TOPIC);
     }
@@ -87,20 +91,22 @@ public class SubscriberFacadeREST extends AbstractFacade<Subscriber> {
     // check out if the user was subscribed to the intended topic, otherwise
     // return the corresponding message. Return the corresponding message
     // after removing the user from been subscribed to that topic:
+    
+    // check if subscriber is subscribed to the topic
     entity.setTopic(topicList.get(0));
-    q = em.createQuery("SELECT s FROM Subscriber s WHERE s.user = :user AND s.topic = :topic");
+    q = em.createNamedQuery("Subscriber.findByUserAndTopic");
     q.setParameter("user", entity.getUser());
     q.setParameter("topic", entity.getTopic());
-    List<Subscriber> subscriberList = q.getResultList();
+    
+    // if result list is empty subscriber is not subscribed to the topic
+    // return NO_SUBSCRIPTION subscription check message
     if (q.getResultList().isEmpty()){
         //System.out.println("Sub list empty");
         return new Subscription_check(entity.getTopic(),Subscription_check.Result.NO_SUBSCRIPTION);
     }
     
-    q = em.createQuery("DELETE FROM Subscriber s WHERE s.user = :user AND s.topic = :topic");
-    q.setParameter("user", entity.getUser());
-    q.setParameter("topic", entity.getTopic());
-    q.executeUpdate();
+    // otherwise delete subscription from db
+    super.delete(entity);
     
     return new Subscription_check(entity.getTopic(),Subscription_check.Result.OKAY);
    
@@ -120,8 +126,7 @@ public class SubscriberFacadeREST extends AbstractFacade<Subscriber> {
     
     Query q = em.createNamedQuery("Subscriber.findByUser");
     q.setParameter("user", entity);
-    List<Subscriber> subscriberList = q.getResultList();
-    return subscriberList;
+    return q.getResultList();
     //throw new RuntimeException("To be completed by the student");
   }
 

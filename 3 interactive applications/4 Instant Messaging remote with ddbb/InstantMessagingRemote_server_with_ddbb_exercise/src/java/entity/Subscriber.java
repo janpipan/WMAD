@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
   @NamedQuery(name = "Subscriber.findAll", query = "SELECT s FROM Subscriber s"),
   @NamedQuery(name = "Subscriber.findById", query = "SELECT s FROM Subscriber s WHERE s.id = :id"),
-  @NamedQuery(name = "Subscriber.findByUser", query = "SELECT s FROM Subscriber s WHERE s.user = :user")})
+  @NamedQuery(name = "Subscriber.findByUser", query = "SELECT s FROM Subscriber s WHERE s.user = :user"),
+  @NamedQuery(name = "Subscriber.findByUserAndTopic", query = "SELECT s FROM Subscriber s WHERE s.user = :user AND s.topic = :topic")})
 public class Subscriber implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
