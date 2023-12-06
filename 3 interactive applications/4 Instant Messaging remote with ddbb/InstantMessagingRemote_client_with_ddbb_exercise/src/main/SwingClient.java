@@ -116,14 +116,25 @@ public class SwingClient {
     publisher = topicManager.publisherOf();
     if (publisher != null) {
         publisherTopic = publisher.topic();
+        publisher_TextArea.setText(publisherTopic.name);
     }
     
-    //List<entity.Subscriber> subscriptions = topicManager.mySubscriptions();
-    
-    /* TO DO */
+    List<entity.Subscriber> subscriptions = topicManager.mySubscriptions();
     
     /* Set my subscriptions */
     
+    for (entity.Subscriber subscription : subscriptions) {
+        Subscriber sub = new SubscriberImpl(SwingClient.this);
+        Subscription_check sub_check = topicManager.subscribe(subscription.getTopic(), sub);
+        if (sub_check.result == Subscription_check.Result.OKAY) {
+            my_subscriptions.put(sub_check.topic,sub);
+            StringBuilder subscriptionListText = new StringBuilder();
+            for (Topic topic : my_subscriptions.keySet()){
+                subscriptionListText.append(topic.name + "\n");
+            }
+        my_subscriptions_TextArea.setText(subscriptionListText.toString());
+        }
+    }
     
   }
 
@@ -250,7 +261,7 @@ public class SwingClient {
 
     public void actionPerformed(ActionEvent e) {
       
-      //...
+      topicManager.close();
     
       System.out.println("one user closed");
       System.exit(0);
@@ -279,7 +290,7 @@ public class SwingClient {
 
     public void windowClosing(WindowEvent e) {
       
-      //...
+      topicManager.close();
     
       System.out.println("one user closed");
       System.exit(0);

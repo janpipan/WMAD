@@ -93,7 +93,7 @@ public class SubscriberFacadeREST extends AbstractFacade<Subscriber> {
     q.setParameter("topic", entity.getTopic());
     List<Subscriber> subscriberList = q.getResultList();
     if (q.getResultList().isEmpty()){
-        System.out.println("Sub list empty");
+        //System.out.println("Sub list empty");
         return new Subscription_check(entity.getTopic(),Subscription_check.Result.NO_SUBSCRIPTION);
     }
     
@@ -118,8 +118,11 @@ public class SubscriberFacadeREST extends AbstractFacade<Subscriber> {
     
     // return the list of subscriptions of the requested user:
     
-    // ...
-    throw new RuntimeException("To be completed by the student");
+    Query q = em.createNamedQuery("Subscriber.findByUser");
+    q.setParameter("user", entity);
+    List<Subscriber> subscriberList = q.getResultList();
+    return subscriberList;
+    //throw new RuntimeException("To be completed by the student");
   }
 
   @Override
