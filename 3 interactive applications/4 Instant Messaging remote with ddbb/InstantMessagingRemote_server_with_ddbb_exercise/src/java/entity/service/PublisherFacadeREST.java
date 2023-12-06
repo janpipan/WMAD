@@ -46,11 +46,13 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
       // set the topic retrieved from the query into the argument
       // of the method create, entity, to be saved as a new publisher:
       
-      String topicName = entity.getTopic().getName();
+      // check if the topic exists
       Query q = em.createNamedQuery("Topic.findByName");
-      q.setParameter("name",topicName);
+      q.setParameter("name",entity.getTopic().getName());
       List<Topic> topicList = q.getResultList();
       
+      // if there is no topic in the db add topic to db otherwise set entity
+      // topic to retrieved topic
       if (topicList.isEmpty()) {
           em.persist(entity.getTopic());
           em.flush();
@@ -61,11 +63,12 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
       // then, create the new publisher for that topic, or
       // modify it, if he/she was publisher of a previous topic:
 
-      q = em.createQuery("SELECT p FROM Publisher p WHERE p.user = :user");
+      // check if user is already a publisher
+      q = em.createNamedQuery("Publisher.findByUser");
       q.setParameter("user", entity.getUser());
-      List<Publisher> publisherList = q.getResultList();
       
-      if (publisherList.isEmpty()) {
+      // if user is not publisher yet add him to db otherwise edit the entry in db
+      if (q.getResultList().isEmpty()) {
           super.create(entity);
       } else {
           super.edit(entity);
@@ -83,38 +86,35 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
     
     // check out if the user is really a publisher:
     
-    Query q = em.createQuery("SELECT p FROM Publisher p WHERE p.user = :user");
-    q.setParameter("user", entity.getUser());
-    List<Publisher> publisherList = q.getResultList();
-    
     // if that is the case, use the fresh new instance of Publisher
     // obtained from the query to the data base to delete that publisher:
     
-    if(!publisherList.isEmpty()) {
-        super.delete(publisherList.get(0));
-    }
+    // check if user is publisher
+    entity = this.publisherOf(entity.getUser());
     
-    // check if it was the last publisher of that topic, if so, delete the
-    // topic from the Topic table, and notify all the currently connected
-    // clients, using the WebSocketServer, about the topic been closed:
-    
-    String topicName = entity.getTopic().getName();
-    q = em.createNamedQuery("Topic.findByName");
-    q.setParameter("name", topicName);
-    List<Topic> topicList = q.getResultList();
-    
-    if (!topicList.isEmpty()) {
-        Topic topic = topicList.get(0);
-        q = em.createQuery("SELECT p FROM Publisher p WHERE p.topic = :topic");
-        q.setParameter("topic", topic);
+    if (entity != null){
+        // if user is publisher delete him from db
+        super.delete(entity);
         
-        if(q.getResultList().isEmpty()){
+        // check if it was the last publisher of that topic, if so, delete the
+        // topic from the Topic table, and notify all the currently connected
+        // clients, using the WebSocketServer, about the topic been closed:
+
+        // check if there are still publishers of the topic
+        Query q = em.createQuery("SELECT p FROM Publisher p WHERE p.topic = :topic");
+        q.setParameter("topic", entity.getTopic());
+        
+        // if result list is empty there are no more publisher of the topic
+        if (q.getResultList().isEmpty()){
+            
+            // remove the topic from topic table
             q = em.createQuery("DELETE FROM Topic t WHERE t.name = :name");
-            q.setParameter("name", topic.getName());
+            q.setParameter("name", entity.getTopic().getName());
             q.executeUpdate();
         }
-        
     }
+    
+    
     
     //throw new RuntimeException("To be completed by the student");
     
@@ -129,14 +129,15 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
     
     // retrieve if the user is publisher of any topic:
     
-    try {
-        Query q = em.createQuery("SELECT p FROM Publisher p WHERE p.user = :user");
-        q.setParameter("user", entity);
-        return (Publisher) q.getSingleResult();
-    } catch (NoResultException e) {
+    
+    Query q = em.createNamedQuery("Publisher.findByUser");
+    q.setParameter("user", entity);
+    List<Publisher> publisherList = q.getResultList();
+    if (publisherList.isEmpty()){
         return null;
     }
     
+    return publisherList.get(0);
     
     // ...
     //throw new RuntimeException("To be completed by the student");
