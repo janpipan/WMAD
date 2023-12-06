@@ -98,14 +98,17 @@ public class SubscriberFacadeREST extends AbstractFacade<Subscriber> {
     q.setParameter("user", entity.getUser());
     q.setParameter("topic", entity.getTopic());
     
+    List<Subscriber> subList = q.getResultList();
     // if result list is empty subscriber is not subscribed to the topic
     // return NO_SUBSCRIPTION subscription check message
-    if (q.getResultList().isEmpty()){
+    if (subList.isEmpty()){
         //System.out.println("Sub list empty");
         return new Subscription_check(entity.getTopic(),Subscription_check.Result.NO_SUBSCRIPTION);
     }
     
     // otherwise delete subscription from db
+    entity = subList.get(0);
+    
     super.delete(entity);
     
     return new Subscription_check(entity.getTopic(),Subscription_check.Result.OKAY);

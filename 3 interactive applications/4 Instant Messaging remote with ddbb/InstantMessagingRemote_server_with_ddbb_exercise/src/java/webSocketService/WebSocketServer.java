@@ -45,12 +45,25 @@ public class WebSocketServer {
     Subscription_request s_req = new Gson().fromJson(message, Subscription_request.class);
     
     // check if the topic exists, otherwise exit:
-    // ...
+    if (!topicFacadeREST.isTopic(s_req.topic).isOpen){
+        return;
+    }
+    
     
     // process the subscription request, from a given client, according
     // to how the websocket client has been programmed at the other end:
-    // ...
-    throw new RuntimeException("To be completed by the student");
+    if (s_req.type == Subscription_request.Type.ADD){
+        if(!subscriptions.get(session).contains(s_req.topic)){
+            subscriptions.get(session).add(s_req.topic);
+            System.out.println("Subscirber added");
+        }
+    } else if (s_req.type == Subscription_request.Type.REMOVE){
+        if(subscriptions.get(session).contains(s_req.topic)){
+            subscriptions.get(session).remove(s_req.topic);
+            System.out.println("Subscirber removed");
+        }
+    }
+    //throw new RuntimeException("To be completed by the student");
 
   }
 
@@ -71,13 +84,24 @@ public class WebSocketServer {
   public static void notifyNewMessage(Message message) {
     String json_message = new Gson().toJson(message);
     Topic topic = message.getTopic();
+    System.out.println(message.getTopic());
     
     try {
       
       // send the message to the clients subscribed to the
       // message's topic and presently connected by a websocket:
-      // ...
-      throw new RuntimeException("To be completed by the student");
+      
+      for (Session session : sessions){
+          List<Topic> topicList = subscriptions.get(session);
+          for (Topic top : topicList){
+              if(top.equals(topic)){
+                  System.out.println("Sending msg");
+                  session.getBasicRemote().sendText(json_message);
+              }
+          }
+      }
+      
+      //throw new RuntimeException("To be completed by the student");
     
     } catch (Throwable e) {
       e.printStackTrace();

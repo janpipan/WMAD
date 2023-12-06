@@ -2,13 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/entel/exercises/3%20interactive%20applications/3%20Instant%20Messaging%20remote/InstantMessagingRemote_server_exercise/src/java/subscriber/SubscriberImpl.java</file>
-            <file>file:/home/entel/exercises/3%20interactive%20applications/3%20Instant%20Messaging%20remote/InstantMessagingRemote_server_exercise/src/java/util/Subscription_close.java</file>
-            <file>file:/home/entel/exercises/3%20interactive%20applications/3%20Instant%20Messaging%20remote/InstantMessagingRemote_server_exercise/src/java/facadeREST/TopicManagerFacadeREST.java</file>
-            <file>file:/home/entel/exercises/3%20interactive%20applications/3%20Instant%20Messaging%20remote/InstantMessagingRemote_server_exercise/src/java/publisher/PublisherImpl.java</file>
-            <file>file:/home/entel/exercises/3%20interactive%20applications/3%20Instant%20Messaging%20remote/InstantMessagingRemote_server_exercise/src/java/topicmanager/TopicManagerImpl.java</file>
-            <file>file:/home/entel/exercises/3%20interactive%20applications/3%20Instant%20Messaging%20remote/InstantMessagingRemote_server_exercise/src/java/webSocketService/WebSocketServer.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

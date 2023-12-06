@@ -31,7 +31,7 @@ public class Client_Alice {
         
         //now you only have to log into the system:
         Login_check login = new Login_check();
-        login.login = "peter";
+        login.login = "Alice";
         login.password = "1234";
         user_alice = apiREST_User.loginUser(login);
         

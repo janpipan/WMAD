@@ -40,20 +40,28 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
     
     // check out if the topic of this message is defined:
     
-    // ...
-    
-    // save the new message and use the WebSocketServer to forward that message
-    // to the currently connected subscribers of the involved topic.
-    // WARNING!!! do not use the same instance of Message to save and forward
-    // the message, make a copy of the message and use both of them, one for each
-    // action.
-    
-    // ...
-    /*
+    // check if the topic exists
     Query q = em.createNamedQuery("Topic.findByName");
-    q.setParameter("name", entity.getTopic().getName());
-    System.out.println(q.getSingleResult());
-    */
+    q.setParameter("name",entity.getTopic().getName());
+    List<Topic> topicList = q.getResultList();
+    
+    // if topic exists proceed
+    if (!topicList.isEmpty()) {
+        
+        // save the new message and use the WebSocketServer to forward that message
+        // to the currently connected subscribers of the involved topic.
+        // WARNING!!! do not use the same instance of Message to save and forward
+        // the message, make a copy of the message and use both of them, one for each
+        // action.
+        Message msg = new Message();
+        msg.setContent(entity.getContent());
+        msg.setTopic(topicList.get(0));
+        entity.setTopic(topicList.get(0));
+        super.create(msg);
+        WebSocketServer.notifyNewMessage(entity);
+        
+    }
+    
     
     //throw new RuntimeException("To be completed by the student");
     

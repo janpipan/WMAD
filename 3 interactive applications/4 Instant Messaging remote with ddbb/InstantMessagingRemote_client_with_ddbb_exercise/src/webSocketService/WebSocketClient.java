@@ -44,7 +44,14 @@ public class WebSocketClient {
   public static synchronized void addSubscriber(Topic topic, Subscriber subscriber) {
     try {
       
-      //...
+        Subscription_request sub_req = new Subscription_request(topic, Subscription_request.Type.ADD);
+        
+        Gson gson = new Gson();
+        String json = gson.toJson(sub_req);
+      
+        session.getBasicRemote().sendText(json);
+        
+        subscriberMap.put(topic, subscriber);
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -54,7 +61,14 @@ public class WebSocketClient {
   public static synchronized void removeSubscriber(Topic topic) {
     try {
       
-      //...
+        Subscription_request sub_req = new Subscription_request(topic, Subscription_request.Type.REMOVE);
+        
+        Gson gson = new Gson();
+        String json = gson.toJson(sub_req);
+
+        session.getBasicRemote().sendText(json);
+
+        
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -66,19 +80,24 @@ public class WebSocketClient {
 
     Gson gson = new Gson();
     Subscription_close subs_close = gson.fromJson(json, Subscription_close.class);
-
+    
     //ordinary message from topic:
     if (subs_close.cause==null) {
-      
-      //...
-      
+        
+        Message msg = gson.fromJson(json, Message.class);
+        
+        if (msg != null){
+            Subscriber sub = subscriberMap.get(msg.topic);
+            sub.onMessage(msg);
+        }
     }
     //ending subscription message:
-    else {
+    else{
+        Subscriber sub = subscriberMap.get(subs_close.topic);
+        sub.onClose(subs_close);
+        subscriberMap.remove(subs_close.topic);
       
-      //...
-      
-    } 
+    }
   }
 
 }
