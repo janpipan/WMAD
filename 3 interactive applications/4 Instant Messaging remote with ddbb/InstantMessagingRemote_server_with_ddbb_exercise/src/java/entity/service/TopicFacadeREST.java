@@ -40,9 +40,8 @@ public class TopicFacadeREST extends AbstractFacade<Topic> {
   public Topic_check isTopic(Topic topic) {
     
     // return if the topic is defined at the Topic table:
-    String topicName = topic.getName();
-    Query q = em.createQuery("SELECT t FROM Topic t WHERE t.name = :name");
-    q.setParameter("name", topicName);
+    Query q = em.createNamedQuery("Topic.findByName");
+    q.setParameter("name", topic.getName());
     // return true if result list is not empty
     return new Topic_check(topic, !q.getResultList().isEmpty());
     //throw new RuntimeException("To be completed by the student");
