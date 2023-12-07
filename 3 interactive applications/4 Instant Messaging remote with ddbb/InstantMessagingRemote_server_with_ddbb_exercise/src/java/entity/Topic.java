@@ -32,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
   @NamedQuery(name = "Topic.findAll", query = "SELECT t FROM Topic t"),
   @NamedQuery(name = "Topic.findById", query = "SELECT t FROM Topic t WHERE t.id = :id"),
-  @NamedQuery(name = "Topic.findByName", query = "SELECT t FROM Topic t WHERE t.name = :name")})
+  @NamedQuery(name = "Topic.findByName", query = "SELECT t FROM Topic t WHERE t.name = :name"),
+  @NamedQuery(name = "Topic.findByTopic", query = "SELECT t FROM Topic t WHERE t.topic = :topic")})
 public class Topic implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id

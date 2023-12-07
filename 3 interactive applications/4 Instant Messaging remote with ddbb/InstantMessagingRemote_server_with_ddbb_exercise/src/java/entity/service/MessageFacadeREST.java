@@ -75,8 +75,11 @@ public class MessageFacadeREST extends AbstractFacade<Message> {
     
     // return all messages stored at the Message table for the intended topic.
     
-    // ...
-    throw new RuntimeException("To be completed by the student");
+    Query q = em.createNamedQuery("Message.findByTopic");
+    q.setParameter("topic", entity);
+    
+    return q.getResultList();
+    //throw new RuntimeException("To be completed by the student");
     
   }
 
