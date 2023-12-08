@@ -59,6 +59,7 @@ public class WebSocketServer {
         }
     } else if (s_req.type == Subscription_request.Type.REMOVE){
         if(subscriptions.get(session).contains(s_req.topic)){
+            session.getBasicRemote().sendText(new Gson().toJson(new Subscription_close(s_req.topic,Subscription_close.Cause.SUBSCRIBER)));
             subscriptions.get(session).remove(s_req.topic);
             System.out.println("Subscirber removed");
         }
@@ -95,7 +96,6 @@ public class WebSocketServer {
           List<Topic> topicList = subscriptions.get(session);
           for (Topic top : topicList){
               if(top.equals(topic)){
-                  System.out.println("Sending msg");
                   session.getBasicRemote().sendText(json_message);
               }
           }

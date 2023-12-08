@@ -80,7 +80,7 @@ public class WebSocketClient {
 
     Gson gson = new Gson();
     Subscription_close subs_close = gson.fromJson(json, Subscription_close.class);
-    
+    System.out.println(subs_close.cause);
     //ordinary message from topic:
     if (subs_close.cause==null) {
         
@@ -93,6 +93,7 @@ public class WebSocketClient {
     }
     //ending subscription message:
     else{
+        
         Subscriber sub = subscriberMap.get(subs_close.topic);
         sub.onClose(subs_close);
         subscriberMap.remove(subs_close.topic);
