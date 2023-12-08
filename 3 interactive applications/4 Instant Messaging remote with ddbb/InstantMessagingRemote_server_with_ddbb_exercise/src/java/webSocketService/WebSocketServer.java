@@ -118,8 +118,15 @@ public class WebSocketServer {
       // send the closing notification to the clients presently
       // connected by a websocket and subscribed to the topic which
       // is about to be closed:
-      // ...
-      throw new RuntimeException("To be completed by the student");
+      for (Session session : sessions) {
+          for (Topic top : subscriptions.get(session)) {
+              if (top.equals(topic)){
+                  session.getBasicRemote().sendText(json_subs_close);
+                  subscriptions.remove(topic);
+              }
+          }
+      }
+      //throw new RuntimeException("To be completed by the student");
       
     } catch (Throwable e) {
       e.printStackTrace();

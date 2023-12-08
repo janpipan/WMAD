@@ -111,6 +111,10 @@ public class PublisherFacadeREST extends AbstractFacade<Publisher> {
             q = em.createQuery("DELETE FROM Topic t WHERE t.name = :name");
             q.setParameter("name", entity.getTopic().getName());
             q.executeUpdate();
+            
+            // notify subscribers that topic no longer exists
+            Subscription_close sc = new Subscription_close(entity.getTopic(), Subscription_close.Cause.PUBLISHER);
+            WebSocketServer.notifyTopicClose(sc);
         }
     }
     

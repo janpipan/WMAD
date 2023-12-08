@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
   @NamedQuery(name = "Message.findAll", query = "SELECT m FROM Message m"),
   @NamedQuery(name = "Message.findById", query = "SELECT m FROM Message m WHERE m.id = :id"),
-  @NamedQuery(name = "Message.findByContent", query = "SELECT m FROM Message m WHERE m.content = :content")})
+  @NamedQuery(name = "Message.findByContent", query = "SELECT m FROM Message m WHERE m.content = :content"),
+  @NamedQuery(name = "Message.findByTopic", query = "SELECT m FROM Message m WHERE m.topic = :topic")})
 public class Message implements Serializable {
   private static final long serialVersionUID = 1L;
   @Id
