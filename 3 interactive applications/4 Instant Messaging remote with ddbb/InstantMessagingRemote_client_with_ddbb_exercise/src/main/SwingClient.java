@@ -125,6 +125,7 @@ public class SwingClient {
     
     for (entity.Subscriber subscription : subscriptions) {
         Subscriber sub = new SubscriberImpl(SwingClient.this);
+        // create websocekt connection for active subscriptions
         Subscription_check sub_check = topicManager.subscribe(subscription.getTopic(), sub);
         if (sub_check.result == Subscription_check.Result.OKAY) {
             my_subscriptions.put(sub_check.topic,sub);
@@ -132,7 +133,14 @@ public class SwingClient {
             for (Topic topic : my_subscriptions.keySet()){
                 subscriptionListText.append(topic.name + "\n");
             }
-        my_subscriptions_TextArea.setText(subscriptionListText.toString());
+            my_subscriptions_TextArea.setText(subscriptionListText.toString());
+            // display all messages for topic
+            List<Message> messagesList = topicManager.messagesFrom(subscription.getTopic());
+            StringBuilder messagesListText = new StringBuilder();
+            for (Message msg : messagesList) {
+                messagesListText.append(msg.topic.name + ": " + msg.content + "\n");
+            }
+            messages_TextArea.append(messagesListText.toString());
         }
     }
     
@@ -208,6 +216,13 @@ public class SwingClient {
                     subscriptionListText.append(topic.name + "\n");
                 }
                 my_subscriptions_TextArea.setText(subscriptionListText.toString());
+                // display all messages from topic
+                List<Message> messagesList = topicManager.messagesFrom(sub_check.topic);
+                StringBuilder messagesListText = new StringBuilder();
+                for (Message msg : messagesList) {
+                    messagesListText.append(msg.topic.name + ": " + msg.content + "\n");
+                }
+                messages_TextArea.append(messagesListText.toString());
             } else if (sub_check.result == Subscription_check.Result.NO_TOPIC) {
                 messages_TextArea.append("System: Topic " + top.name + " does not exist.\n");
             }
