@@ -1,0 +1,4 @@
+#Thu Nov 04 16:55:36 CET 2021
+base.0=/home/entel/StudioProjects/WhatsApp_exercise/app/build/intermediates/dex/debug/mergeDexDebug/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
