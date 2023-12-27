@@ -82,9 +82,9 @@ public class e_MessagesActivity extends Activity {
     protected List<Message> doInBackground(Integer... userIds) {
 
       //...
-
+      return RPC.retrieveMessages(userIds[0],userIds[1]);
       //remove this sentence on completing the code:
-      return null;
+      //return null;
     }
 
     @Override

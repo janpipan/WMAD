@@ -39,7 +39,19 @@ public class MyAdapter_users extends BaseAdapter {
         convertView = LayoutInflater.from(context).inflate(R.layout.row_twotextviews, parent, false);
       }
 
-      //...
+      // get userinfo at specified position
+      UserInfo currentUser = users.get(position);
+
+      TextView textViewName = (TextView) convertView.findViewById(R.id.row_twotextviews_name);
+      TextView textViewSurname = (TextView) convertView.findViewById(R.id.row_twotextviews_surname);
+
+      // if user is not null set text in textViews
+      if (currentUser != null) {
+
+          textViewName.setText(currentUser.getName());
+          textViewSurname.setText(currentUser.getSurname());
+
+      }
 
       return convertView;
     }

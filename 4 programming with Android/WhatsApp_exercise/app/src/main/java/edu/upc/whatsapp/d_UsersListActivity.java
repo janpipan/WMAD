@@ -40,20 +40,33 @@ public class d_UsersListActivity extends Activity {
     protected List<UserInfo> doInBackground(Void... nothing) {
 
       //...
+      return RPC.allUserInfos();
 
       //remove this sentence on completing the code:
-      return null;
+      //return null;
 
     }
 
     @Override
-    protected void onPostExecute(List<UserInfo> users) {
+    protected void onPostExecute(final List<UserInfo> users) {
       progressDialog.dismiss();
       if (users == null) {
         toastShow("There's been an error downloading the users");
       } else {
 
         //...
+        ListView listView = (ListView) findViewById(R.id.listView);
+        adapter = new MyAdapter_users(d_UsersListActivity.this, users);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+          @Override
+          public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            UserInfo selectedUser = users.get(i);
+            globalState.user_to_talk_to = selectedUser;
+            startActivity(new Intent(d_UsersListActivity.this, e_MessagesActivity.class));
+          }
+        });
 
       }
     }
