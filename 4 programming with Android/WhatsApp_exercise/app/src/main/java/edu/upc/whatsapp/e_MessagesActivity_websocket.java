@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -114,6 +115,8 @@ public class e_MessagesActivity_websocket extends Activity {
       try {
 
         //...
+        e_MessagesActivity_websocket.this.session = session;
+        session.getBasicRemote().sendText(gson.toJson(globalState.my_user));
         
         session.addMessageHandler(new MessageHandler.Whole<String>() {
                     @Override
@@ -121,6 +124,7 @@ public class e_MessagesActivity_websocket extends Activity {
                         System.out.println("websocket message received:  "+message);
 
                         //...
+                      sendMessageToHandler("message", message);
 
                     }
                 });
@@ -164,6 +168,11 @@ public class e_MessagesActivity_websocket extends Activity {
 
         //...
 
+        adapter.addMessage((Message) gson.fromJson(content, Message.class));
+        adapter.notifyDataSetChanged();
+
+
+
       }
       else{
         toastShow(content);
@@ -183,9 +192,9 @@ public class e_MessagesActivity_websocket extends Activity {
     protected List<Message> doInBackground(Integer... userIds) {
 
       //...
-
+      return RPC.retrieveMessages(userIds[0],userIds[1]);
       //remove this sentence on completing the code:
-      return null;
+      //return null;
     }
 
     @Override
@@ -197,7 +206,9 @@ public class e_MessagesActivity_websocket extends Activity {
         toastShow(all_messages.size()+" messages downloaded");
 
         //...
-
+        conversation = (ListView) findViewById(R.id.conversation);
+        adapter = new MyAdapter_messages(e_MessagesActivity_websocket.this, all_messages,globalState.my_user);
+        conversation.setAdapter(adapter);
       }
     }
   }
@@ -208,9 +219,15 @@ public class e_MessagesActivity_websocket extends Activity {
     protected List<Message> doInBackground(Integer... userIds) {
 
       //...
+      // if adapter has been initialized and is not empty retrieve only new messages
+      // otherwise retrieve all messages
+      if (adapter != null && !adapter.isEmpty()) {
+        return RPC.retrieveNewMessages(userIds[0],userIds[1],adapter.getLastMessage());
+      }
+      return RPC.retrieveMessages(userIds[0],userIds[1]);
 
       //remove this sentence on completing the code:
-      return null;
+      //return null;
     }
 
     @Override
@@ -221,6 +238,14 @@ public class e_MessagesActivity_websocket extends Activity {
         toastShow(new_messages.size()+" new message/s downloaded");
 
         //...
+        if (adapter != null) {
+          adapter.addMessages(new_messages);
+          adapter.notifyDataSetChanged();
+        } else {
+          conversation = (ListView) findViewById(R.id.conversation);
+          adapter = new MyAdapter_messages(e_MessagesActivity_websocket.this, new_messages,globalState.my_user);
+          conversation.setAdapter(adapter);
+        }
 
       }
     }
@@ -229,6 +254,12 @@ public class e_MessagesActivity_websocket extends Activity {
   public void sendText(final View view) {
 
     //...
+    Message message = new Message();
+    message.setContent(input_text.getText().toString().trim());
+    message.setDate(new Date());
+    message.setUserReceiver(globalState.user_to_talk_to);
+    message.setUserSender(globalState.my_user);
+    new SendMessage_Task().execute(message);
 
     input_text.setText("");
 
@@ -247,9 +278,10 @@ public class e_MessagesActivity_websocket extends Activity {
     protected Message doInBackground(Message... messages) {
 
       //...
+      return RPC.postMessage(messages[0]);
 
       //remove this sentence on completing the code:
-      return null;
+      //return null;
     }
 
     @Override
@@ -258,6 +290,8 @@ public class e_MessagesActivity_websocket extends Activity {
         toastShow("message sent");
 
         //...
+        adapter.addMessage(message_reply);
+        adapter.notifyDataSetChanged();
 
       } else {
         toastShow("There's been an error sending the message");

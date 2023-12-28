@@ -44,6 +44,11 @@
                   android:windowSoftInputMode="stateHidden">
         </activity>
 
+        <activity android:name=".e_MessagesActivity_websocket"
+            android:label="MessagesWebsockets"
+            android:windowSoftInputMode="stateHidden">
+        </activity>
+
         <service android:name=".service.PushService" />
                 
     </application>

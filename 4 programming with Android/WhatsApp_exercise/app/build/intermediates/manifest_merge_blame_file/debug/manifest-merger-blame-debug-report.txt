@@ -24,7 +24,7 @@
 14-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:14:22-76
 15
 16    <application
-16-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:16:5-49:19
+16-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:16:5-54:19
 17        android:name="edu.upc.whatsapp._GlobalState"
 17-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:16:18-46
 18        android:debuggable="true"
@@ -90,10 +90,19 @@
 51            android:windowSoftInputMode="stateHidden" >
 51-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:44:19-60
 52        </activity>
-53
-54        <service android:name="edu.upc.whatsapp.service.PushService" />
-54-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:47:9-56
-54-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:47:18-53
-55    </application>
-56
-57</manifest>
+53        <activity
+53-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:47:9-50:20
+54            android:name="edu.upc.whatsapp.e_MessagesActivity_websocket"
+54-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:47:19-63
+55            android:label="MessagesWebsockets"
+55-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:48:13-47
+56            android:windowSoftInputMode="stateHidden" >
+56-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:49:13-54
+57        </activity>
+58
+59        <service android:name="edu.upc.whatsapp.service.PushService" />
+59-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:52:9-56
+59-->/home/entel/WMAD/4 programming with Android/WhatsApp_exercise/app/src/main/AndroidManifest.xml:52:18-53
+60    </application>
+61
+62</manifest>

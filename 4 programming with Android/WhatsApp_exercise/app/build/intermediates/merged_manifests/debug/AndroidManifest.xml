@@ -50,6 +50,11 @@
             android:label="Messages"
             android:windowSoftInputMode="stateHidden" >
         </activity>
+        <activity
+            android:name="edu.upc.whatsapp.e_MessagesActivity_websocket"
+            android:label="MessagesWebsockets"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
 
         <service android:name="edu.upc.whatsapp.service.PushService" />
     </application>
