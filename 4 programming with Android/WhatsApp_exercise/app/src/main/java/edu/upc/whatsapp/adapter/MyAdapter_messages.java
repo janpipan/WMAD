@@ -82,7 +82,7 @@ public class MyAdapter_messages extends BaseAdapter {
     ((TextView) convertView.findViewById(R.id.row_date)).setText(sdf.format(date));
 
     //... set content text
-    ((TextView) convertView.findViewById(R.id.row_date)).setText(messages.get(position).getContent());
+    ((TextView) convertView.findViewById(R.id.row_content)).setText(messages.get(position).getContent());
 
     ((TextView) convertView.findViewById(R.id.row_hour)).setText(sdf2.format(date));
 

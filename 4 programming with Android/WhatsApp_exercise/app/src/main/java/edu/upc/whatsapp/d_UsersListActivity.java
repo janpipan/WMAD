@@ -64,7 +64,8 @@ public class d_UsersListActivity extends Activity {
           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             UserInfo selectedUser = users.get(i);
             globalState.user_to_talk_to = selectedUser;
-            startActivity(new Intent(d_UsersListActivity.this, e_MessagesActivity.class));
+            //startActivity(new Intent(d_UsersListActivity.this, e_MessagesActivity.class));
+            startActivity(new Intent(d_UsersListActivity.this, e_MessagesActivity_websocket.class));
           }
         });
 

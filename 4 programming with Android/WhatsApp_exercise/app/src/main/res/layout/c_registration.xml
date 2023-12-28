@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:inputType="text"
             />
 
         <TextView
@@ -46,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:inputType="textPassword"
             />
 
         <TextView
@@ -65,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:inputType="textPersonName"
             />
 
         <TextView
@@ -83,6 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:inputType="text"
             />
 
         <TextView
@@ -101,6 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
+            android:inputType="textEmailAddress"
             />
 
 

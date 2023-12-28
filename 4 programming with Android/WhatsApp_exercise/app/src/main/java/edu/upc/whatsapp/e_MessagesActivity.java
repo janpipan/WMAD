@@ -14,6 +14,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -59,14 +60,18 @@ public class e_MessagesActivity extends Activity {
     super.onResume();
 
     //...
+    timer = new Timer();
+
+    timer.schedule(new fetchNewMessagesTimerTask(),5000,10000);
+
 
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-
     //...
+    timer.cancel();
 
   }
 
@@ -95,7 +100,9 @@ public class e_MessagesActivity extends Activity {
       } else {
         toastShow(all_messages.size()+" messages downloaded");
 
-        //...
+        conversation = (ListView) findViewById(R.id.conversation);
+        adapter = new MyAdapter_messages(e_MessagesActivity.this, all_messages,globalState.my_user);
+        conversation.setAdapter(adapter);
 
       }
     }
@@ -107,9 +114,16 @@ public class e_MessagesActivity extends Activity {
     protected List<Message> doInBackground(Integer... userIds) {
 
       //...
+        // if adapter has been initialized and is not empty retrieve only new messages
+        // otherwise retrieve all messages
+      if (adapter != null && !adapter.isEmpty()) {
+          return RPC.retrieveNewMessages(userIds[0],userIds[1],adapter.getLastMessage());
+      }
+        return RPC.retrieveMessages(userIds[0],userIds[1]);
+
 
       //remove this sentence on completing the code:
-      return null;
+      //return null;
     }
 
     @Override
@@ -118,8 +132,17 @@ public class e_MessagesActivity extends Activity {
         toastShow("There's been an error downloading new messages");
       } else {
         toastShow(new_messages.size()+" new message/s downloaded");
-
-        //...
+        // check if adapter has been initialized
+          // if it is initialized add new messages to adapter and update view
+          // otherwise initialize adapter and set it to conversation view
+        if (adapter != null) {
+          adapter.addMessages(new_messages);
+          adapter.notifyDataSetChanged();
+        } else {
+          conversation = (ListView) findViewById(R.id.conversation);
+          adapter = new MyAdapter_messages(e_MessagesActivity.this, new_messages,globalState.my_user);
+          conversation.setAdapter(adapter);
+        }
 
       }
     }
@@ -128,6 +151,12 @@ public class e_MessagesActivity extends Activity {
   public void sendText(final View view) {
 
     //...
+    Message message = new Message();
+    message.setContent(input_text.getText().toString().trim());
+    message.setDate(new Date());
+    message.setUserReceiver(globalState.user_to_talk_to);
+    message.setUserSender(globalState.my_user);
+    new SendMessage_Task().execute(message);
 
     input_text.setText("");
 
@@ -146,9 +175,10 @@ public class e_MessagesActivity extends Activity {
     protected Message doInBackground(Message... messages) {
 
       //...
+      return RPC.postMessage(messages[0]);
 
       //remove this sentence on completing the code:
-      return null;
+      //return null;
     }
 
     @Override
@@ -157,6 +187,8 @@ public class e_MessagesActivity extends Activity {
         toastShow("message sent");
 
         //...
+        adapter.addMessage(message_reply);
+        adapter.notifyDataSetChanged();
 
       } else {
         toastShow("There's been an error sending the message");
@@ -166,13 +198,16 @@ public class e_MessagesActivity extends Activity {
 
   private class fetchNewMessagesTimerTask extends TimerTask {
 
+
+
     @Override
     public void run() {
 
-      //...
+      new fetchNewMessages_Task().execute(globalState.my_user.getId(), globalState.user_to_talk_to.getId());
 
     }
   }
+
 
   private void setup_input_text(){
 
